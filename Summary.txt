@@ -1,0 +1,12 @@
+Bees_detection 
+
+
+-- INPUT 
+
+dossier JSON avec 1 fichier .json / espece avec label + bounding boxes 
+dossier BD71 avec 1 sous dossier /espece avec les images 
+
+-- jsontocsv.py 
+
+finaldataset.csv avec tous les file path + bounding boxes + "Anthophila"
+

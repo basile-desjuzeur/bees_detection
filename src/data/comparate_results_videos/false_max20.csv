@@ -1,0 +1,39 @@
+videos,prediction,reelle
+/home/acarlier/code/data_ornithoscope/birds_videos/2022/balacet/2022-08-29-15-13-45_balacet_1MESNON_NMTA.mp4,"['SITTOR', 'MESNON', 'MESCHA']",['MESNON']
+/home/acarlier/code/data_ornithoscope/birds_videos/2022/balacet/2022-08-29-15-28-39_balacet_1MESNON_1MESCHA.mp4,"['SITTOR', 'MESCHA']","['MESNON', 'MESCHA']"
+/home/acarlier/code/data_ornithoscope/birds_videos/2022/balacet/2022-08-29-16-21-06_balacet_1ROUFAM.mp4,"['ROUGOR', 'SITTOR', 'VEREUR', 'MESCHA']",['ROUGOR']
+/home/acarlier/code/data_ornithoscope/birds_videos/2022/balacet/2022-08-29-16-32-38_balacet_1MESCHA_MCTN.mp4,"['MESCHA', 'PINARB']",['MESCHA']
+/home/acarlier/code/data_ornithoscope/birds_videos/2022/balacet/2022-08-30-05-48-02_balacet_1SITTOR_1MESCHA_1SITTOR.mp4,"['MESCHA', 'PIEBAV', 'MESCHA']","['SITTOR', 'MESCHA', 'SITTOR']"
+/home/acarlier/code/data_ornithoscope/birds_videos/2022/balacet/2022-08-30-07-22-38_balacet_1SITTOR_1MESNON.mp4,"['SITTOR', 'MESCHA', 'MESNON']","['SITTOR', 'MESNON']"
+/home/acarlier/code/data_ornithoscope/birds_videos/2022/C1/2022-08-23-05-51-16_C1_1SITTOR.mp4,"['MESCHA', 'SITTOR', 'SITTOR']",['SITTOR']
+/home/acarlier/code/data_ornithoscope/birds_videos/2022/C1/2022-08-23-06-54-39_C1_2MESCHA_EMOG.mp4,"['MESCHA', 'MESCHA', 'SITTOR']","['MESCHA', 'MESCHA']"
+/home/acarlier/code/data_ornithoscope/birds_videos/2022/C1/2022-08-23-08-08-12_C1_2MESCHA.mp4,"['MESCHA', 'MESCHA', 'MESBLE']","['MESCHA', 'MESCHA']"
+/home/acarlier/code/data_ornithoscope/birds_videos/2022/C1/2022-08-23-15-37-31_C1_1ROUGOR.mp4,"['PINARB', 'ROUGOR']",['ROUGOR']
+/home/acarlier/code/data_ornithoscope/birds_videos/2022/C4/2022-08-24-07-59-50_C4_1MESCHA_GOME.mp4,[],['MESCHA']
+/home/acarlier/code/data_ornithoscope/birds_videos/2022/C4/2022-08-24-08-09-58_C4_1ROUFAM.mp4,"['ROUGOR', 'VEREUR']",['ROUGOR']
+/home/acarlier/code/data_ornithoscope/birds_videos/2022/C4/2022-08-24-09-14-39_C4_1ROUFAM.mp4,"['ROUGOR', 'VEREUR', 'ROUGOR']",['ROUGOR']
+/home/acarlier/code/data_ornithoscope/birds_videos/2022/C4/2022-08-24-14-03-43_C4_1MESNOI.mp4,[],['MESNOI']
+/home/acarlier/code/data_ornithoscope/birds_videos/2022/C4/2022-08-24-14-06-10_C4_1MESNON_1MESNOI.mp4,"['MESNON', 'SITTOR']","['MESNON', 'MESNOI']"
+/home/acarlier/code/data_ornithoscope/birds_videos/2022/C4/2022-08-24-14-20-58_C4_1MESNOI.mp4,"['MESCHA', 'SITTOR', 'MESNON']",['MESNOI']
+/home/acarlier/code/data_ornithoscope/birds_videos/2022/C4/2022-08-24-14-26-51_C4_1MESCHA_GOME_1SITTOR.mp4,['SITTOR'],"['MESCHA', 'SITTOR']"
+/home/acarlier/code/data_ornithoscope/birds_videos/2022/C4/2022-08-24-14-35-41_C4_1MESNOI_1MESCHA.mp4,"['MESNON', 'MESCHA']","['MESNOI', 'MESCHA']"
+/home/acarlier/code/data_ornithoscope/birds_videos/2022/C4/2022-08-24-14-58-54_C4_1MESNOI_1ROUFAM.mp4,"['ROUGOR', 'VEREUR']","['MESNOI', 'ROUGOR']"
+/home/acarlier/code/data_ornithoscope/birds_videos/2022/C4/2022-08-24-14-59-51_C4_1ROUFAM_1SITTOR.mp4,"['ROUGOR', 'VEREUR', 'SITTOR']","['ROUGOR', 'SITTOR']"
+/home/acarlier/code/data_ornithoscope/birds_videos/2022/C4/2022-08-24-15-02-16_C4_1MESNON_1MESNOI.mp4,['MESNON'],"['MESNON', 'MESNOI']"
+/home/acarlier/code/data_ornithoscope/birds_videos/2022/C4/2022-08-24-15-05-13_C4_1MESNOI_1SITTOR_1MESNOI.mp4,['SITTOR'],"['MESNOI', 'SITTOR', 'MESNOI']"
+/home/acarlier/code/data_ornithoscope/birds_videos/2022/C4/2022-08-24-15-10-49_C4_1MESBLE.mp4,"['MESBLE', 'MESCHA']",['MESBLE']
+/home/acarlier/code/data_ornithoscope/birds_videos/2022/C4/2022-08-24-15-52-45_C4_1MESNON.mp4,"['MESCHA', 'MESNON']",['MESNON']
+/home/acarlier/code/data_ornithoscope/birds_videos/2022/C4/2022-08-24-15-53-40_C4_1MESNON_1MESCHA_1ROUFAM.mp4,"['MESCHA', 'ROUGOR']","['MESNON', 'MESCHA', 'ROUGOR']"
+/home/acarlier/code/data_ornithoscope/birds_videos/2022/C4/2022-08-24-16-44-00_C4_1MESHUP_1SITTOR_1MESHUP.mp4,"['MESNON', 'SITTOR', 'MESHUP']","['MESHUP', 'SITTOR', 'MESHUP']"
+/home/acarlier/code/data_ornithoscope/birds_videos/2022/C4/2022-08-24-16-44-28_C4_1MESNON_1MESCHA_1MESHUP.mp4,"['MESNON', 'MESCHA', 'MESHUP', 'ROUGOR']","['MESNON', 'MESCHA', 'MESHUP']"
+/home/acarlier/code/data_ornithoscope/birds_videos/2022/C4/2022-08-24-16-58-41_C4_1MESHUP_1SITTOR.mp4,"['MESNON', 'MESHUP', 'SITTOR']","['MESHUP', 'SITTOR']"
+/home/acarlier/code/data_ornithoscope/birds_videos/2022/C4/2022-08-24-17-23-46_C4_1ROUFAM.mp4,"['ROUGOR', 'SITTOR']",['ROUGOR']
+/home/acarlier/code/data_ornithoscope/birds_videos/2022/C4/2022-08-25-06-02-24_C4_1ROUFAM_1SITTOR.mp4,"['MULGRI', 'ACCMOU', 'SITTOR']","['ROUGOR', 'SITTOR']"
+/home/acarlier/code/data_ornithoscope/birds_videos/2022/C4/2022-08-25-06-27-09_C4_1SITTOR_1MESHUP_1SITTOR.mp4,"['SITTOR', 'SITTOR']","['SITTOR', 'MESHUP', 'SITTOR']"
+/home/acarlier/code/data_ornithoscope/birds_videos/2022/C4/2022-08-25-07-11-36_C4_1ROUFAM_1MESNOI.mp4,['ROUGOR'],"['ROUGOR', 'MESNOI']"
+/home/acarlier/code/data_ornithoscope/birds_videos/2022/C4/2022-08-25-07-52-02_C4_1MESNOI_1MESHUP.mp4,"['SITTOR', 'MESHUP', 'MESNON']","['MESNOI', 'MESHUP']"
+/home/acarlier/code/data_ornithoscope/birds_videos/2022/C4/2022-08-25-08-17-11_C4_1MESHUP.mp4,"['MESHUP', 'MESNON']",['MESHUP']
+/home/acarlier/code/data_ornithoscope/birds_videos/2022/C4/2022-08-25-09-40-04_C4_1SITTOR_1MESBLE_1SITTOR.mp4,"['SITTOR', 'SITTOR']","['SITTOR', 'MESBLE', 'SITTOR']"
+/home/acarlier/code/data_ornithoscope/birds_videos/2022/gajan/2022-07-28-10-26-15_gajan_1ROUGOR.mp4,"['MESCHA', 'ROUGOR', 'ACCMOU']",['ROUGOR']
+/home/acarlier/code/data_ornithoscope/birds_videos/2022/gajan/2022-07-28-10-26-49_gajan_1ROUGOR.mp4,"['ROUGOR', 'ACCMOU', 'MULGRI']",['ROUGOR']
+/home/acarlier/code/data_ornithoscope/birds_videos/2022/gajan/2022-08-22-10-13-45_gajan_1MESNON_1MESBLEU_1SITEUR.mp4,"['SITTOR', 'MESBLE']","['MESNON', 'MESBLE', 'SITTOR']"
