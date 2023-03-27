@@ -2,6 +2,8 @@ import pickle
 import json
 import numpy as np
 import matplotlib.pyplot as plt
+from datetime import datetime
+import os
 
 from keras_yolov2.preprocessing import parse_annotation_csv
 from keras_yolov2.utils import (bbox_iou,
@@ -17,10 +19,11 @@ from keras_yolov2.utils import (bbox_iou,
 
 def load_k(k):
     """
-    Loada the k-th image.
+    Loads the k-th image.
     """
 
     annots = []
+
 
     # Loop on all objects
     for obj in images[k]['object']:
@@ -43,7 +46,7 @@ with open(pickle_path, 'rb') as fp:
     img_boxes = pickle.load(fp)
 
 # Path to config filed used to evaluate
-config_path = "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/config/bees_detection_copy.json"
+config_path = "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/config/bees_detection.json"
 
 # Open config file as a dict
 with open(config_path) as config_buffer:
@@ -123,17 +126,24 @@ for iou_threshold in ious:
 
 
             # Store expected values
-            annotation_k = load_k(k)
-            if len(annotation_k[0]) == 0:
-                labels_predicted['true_id'] = 1
-                labels_predicted['true_name'] = ['unknown']
-            else:
-                labels_predicted['true_id'] = list(annotation_k[:,4])
-                labels_predicted['true_name'] = from_id_to_label_name(list_labels, list(annotation_k[:,4]))
             
-            # Compute TP FP FN TN
-            compute_class_TP_FP_FN(labels_predicted)
-            predictions.append(labels_predicted)
+            try :
+                annotation_k = load_k(k)
+
+                if len(annotation_k[0]) == 0:
+                    labels_predicted['true_id'] = 1
+                    labels_predicted['true_name'] = ['unknown']
+                else:
+                    labels_predicted['true_id'] = list(annotation_k[:,4])
+                    labels_predicted['true_name'] = from_id_to_label_name(list_labels, list(annotation_k[:,4]))
+                
+                # Compute TP FP FN TN
+                compute_class_TP_FP_FN(labels_predicted)
+                predictions.append(labels_predicted)
+
+            except :
+                Exception('Error while loading image : ' + img_name + '')
+
 
         # Compute global results
         class_metrics = get_precision_recall_from_prediction_label(predictions, list_labels)
@@ -175,11 +185,13 @@ zlabels = ['Precision', 'Recall', 'F1-Score']
 # Create scores and ious meshes
 scores_mesh, ious_mesh = np.meshgrid(scores, ious)
 
-
-
 # P-R-F1 As array
 prf1 = np.array(prf1)
 
+# save the plots in a folder
+now=datetime.now()
+output_path='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/outputs/plots_find_thresholds_on_{}'.format(now.strftime("%d-%m-%Y_%H:%M"))
+os.makedirs(output_path)
 
 for i in range(len(titles)):
 
@@ -192,8 +204,8 @@ for i in range(len(titles)):
     ax.set_ylabel('IoU threshold')
     ax.set_zlabel(zlabels[i % 3])
     plt.colorbar(surf)
-
-plt.show()
+    plt.savefig(output_path + '/' + titles[i] + '.png') 
+    plt.show()
 
 # Find the best score and iou for each metric
 best_score = {}

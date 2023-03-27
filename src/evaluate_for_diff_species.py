@@ -15,12 +15,7 @@ we evaluate create one csv file per species and evaluate the model on each of th
 returning a csv file with the precision, recall, F1 score and mAP for each species 
 + for all the species together
 
-1) get the images to evaluate (test + validation) if exists
-2) create a temp folder
-3) stores in this folder one csv per label + whole_dataset.csv
-4) on each csv file, change the config file to only evaluate on this species and evaluate the model,store the metrics  in a dataframe
-5) write the dataframe in a csv file
-6) deletes temp folder & rewrites config file 
+# pas super opti mais ca marche
 '''
 
 

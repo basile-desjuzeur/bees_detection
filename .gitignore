@@ -1,2 +1,7 @@
 venv_bees/*
 cuda/*
+_pycache_/*
+.ipynb_checkpoints/*
+old/*
+data/*
+Metriques.docx

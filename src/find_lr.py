@@ -12,17 +12,19 @@ from keras_yolov2.utils import enable_memory_growth
 from keras_yolov2.learning_rate_finder import LRFinder
 from keras_yolov2.yolo_loss import YoloLoss
 
+from datetime import datetime
+
 argparser = argparse.ArgumentParser(
     description='Train and validate YOLO_v2 model on any dataset')
 
 argparser.add_argument(
     '-c',
     '--conf',
-    default='config/config_lab_mobilenetV1.json',
+    default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/config/bees_detection.json',
     help='path to configuration file')
 
 
-def _main_(args):
+def _main_(args):   
     config_path = args.conf
     enable_memory_growth()
 
@@ -108,7 +110,9 @@ def _main_(args):
                sampling=False)
     
     lr_finder_callback.plot()
-    plt.show()
+    now=datetime.now()
+    plt.savefig('/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/outputs/lr_finder_on_{}_.png'.format(now.strftime("%d_%m_%Y_%H_%M")))
+
 
 
 if __name__ == '__main__':

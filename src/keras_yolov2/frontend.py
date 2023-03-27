@@ -37,7 +37,6 @@ class YOLO(object):
         self._finetune = finetune
 
         if self._finetune:
-            print('Coucou on freeze')
             self._freeze = True
             
             
@@ -265,7 +264,7 @@ class YOLO(object):
         # Save history as pickle
         saved_weights_file_name=root.split(os.sep)[-1]
         if self._saved_pickles_path != '':
-            pickle_file_path = f'{self._saved_pickles_path}/history/{saved_weights_file_name}_bestLoss{ext}.p'
+            pickle_file_path = f'{self._saved_pickles_path}/history/{saved_weights_file_name}_bestLoss_on{datetime.datetime.now()}_{ext}.p'
             pickel_dir_path ='/'.join(pickle_file_path.split('/')[:-1])
             if not os.path.exists(pickel_dir_path):
                 os.makedirs(pickel_dir_path)

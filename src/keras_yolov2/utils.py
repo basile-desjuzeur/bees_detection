@@ -142,6 +142,40 @@ def draw_boxes(image, boxes, labels):
     return image
 
 
+def draw_true_boxes(image, boxes, labels):
+    """
+    Draw the true boxes on the image with green color and specific label
+    :param image: the image to draw on
+    :param boxes: the true boxes
+    :param labels: the labels
+    :return: the image with the true boxes drawn on it
+    """
+    image_h, image_w, _ = image.shape
+
+    for box in boxes:
+
+        # Coordinates may be relative or absolute as input
+        # If relative, convert to absolute
+
+        if box.xmin > 1 or box.xmax > 1 or box.ymin > 1 or box.ymax > 1:
+            xmin = int(box.xmin)
+            ymin = int(box.ymin)
+            xmax = int(box.xmax)
+            ymax = int(box.ymax)
+        else:
+            xmin = int(box.xmin * image_w)
+            ymin = int(box.ymin * image_h)
+            xmax = int(box.xmax * image_w)
+            ymax = int(box.ymax * image_h)
+
+        line_width_factor = int(min(image_h, image_w) * 0.005)
+        cv2.rectangle(image, (xmin, ymin), (xmax, ymax),(0,255,0), line_width_factor * 2)
+        cv2.putText(image, "Ground truth : {}".format(labels[box.get_label()]),
+                     (xmin, ymin + line_width_factor * 10), cv2.FONT_HERSHEY_PLAIN, 2e-3 * min(image_h, image_w),
+                    (255, 0, 255), line_width_factor)
+    return image
+
+
 def decode_netout(netout, anchors, nb_class, obj_threshold=0.5, nms_threshold=0.3): #on transforme ce qui sort du réseau en bounding boxes
     grid_h, grid_w, nb_box = netout.shape[:3]
 
@@ -169,6 +203,7 @@ def decode_netout(netout, anchors, nb_class, obj_threshold=0.5, nms_threshold=0.
 
                     box = BoundBox(x - w / 2, y - h / 2, x + w / 2, y + h / 2, confidence, classes)
                     boxes.append(box)
+
     # print("boxes:",boxes)
     # suppress non-maximal boxes
     for c in range(nb_class):
@@ -281,7 +316,7 @@ def _softmax(x, axis=-1, t=-100.):
 
 
 def import_dynamically(name):
-    components = name.split('.')
+    components = name.spredicted_labelit('.')
     mod = __import__(components[0])
     for comp in components[1:]:
         mod = getattr(mod, comp)
@@ -365,7 +400,7 @@ def list_files(base_path, valid_exts="", contains=None):
         # loop over the filenames in the current directory
         for filename in filenames:
             # if the contains string is not none and the filename does not contain
-            # the supplied string, then ignore the file
+            # the suppredicted_labelied string, then ignore the file
             if contains is not None and filename.find(contains) == -1:
                 continue
 
@@ -402,8 +437,11 @@ def from_id_to_label_name(list_label, list_label_id):
     #print('to', list_ret)
     return list_ret
 
-#used for a single image
-def compute_bbox_TP_FP_FN(pred_boxes, true_boxes, list_of_classes):
+
+def compute_bbox_TP_FP_FN(pred_boxes, true_boxes, list_of_classes, iou_threshold=0.5):
+    """ To be applied to a list of predicted boxes and a list of true boxes of the same image.
+    """
+
     # Store TP, FP and FN labels
     predictions = {'TP': [], 'FP': [], 'FN': []}
 
@@ -415,23 +453,26 @@ def compute_bbox_TP_FP_FN(pred_boxes, true_boxes, list_of_classes):
 
     # Store nicely predicted box ids
     good_boxes = []
+    
     # Loop on every predicted boxes
     for k, box_pred in enumerate(pred_boxes):
+
         # Get the label of the predicted box
         pred_label = box_pred.get_label()
 
-        # Get true box ids with the same label
+        # Get true box ids where predicted label is the same as the true label
         true_indexs = [i for i in range(len(true_boxes)) if true_boxes[i].get_label() == pred_label]
 
         # Sort them by IoU
         true_indexs = sorted(true_indexs, key=lambda i : bbox_iou(true_boxes[i], box_pred), reverse=True)
 
         # The predicted box does not correspond to any true box (using class only)
+        # i.e there is no true box with the same class as the predicted box
         if len(true_indexs) == 0:
             continue
         
         # If the IoU is correct, it is a TP
-        if bbox_iou(true_boxes[true_indexs[0]], box_pred) > 0.5:  # vary the trhesold here
+        if bbox_iou(true_boxes[true_indexs[0]], box_pred) > iou_threshold: 
             predictions['TP'].append(list_of_classes[pred_label])
             ious_img.append(bbox_iou(true_boxes[true_indexs[0]], box_pred))
             intersections_img.append(bbox_intersection_proportion( box_pred,true_boxes[true_indexs[0]]))
@@ -450,29 +491,48 @@ def compute_bbox_TP_FP_FN(pred_boxes, true_boxes, list_of_classes):
 
 
 def compute_class_TP_FP_FN(dict_pred):
+    """ to be applied on a list of predictions for a single image
+    dict_pred is like : 
+    {'img_name': 'Bombus pascuorum/Bombus pascuorum29533.jpg', 'predictions_id': [0], 'predictions_name': ['Anthophila'], 
+    'score': [0.72500086], 'true_id': [0.0], 'true_name': ['Anthophila']}
+    does not rerturn anything, just update the dict_pred
+    final dict_pred is like :
+    {'img_name': 'Bombus pascuorum/Bombus pascuorum29533.jpg', 'predictions_id': [0], 'predictions_name': ['Anthophila'],
+    'score': [0.72500086], 'true_id': [0.0], 'true_name': [], 'TP': ['Anthophila'], 'FN': [], 'FP': []}"""
+
+    # two lists of labels
     true_labels = dict_pred['true_name']
     pred_labels = dict_pred['predictions_name']
+
     TP = []
     FP = copy.deepcopy(pred_labels)
     FN = copy.deepcopy(true_labels)
-    for pl in pred_labels:
-        if pl in true_labels:
-            true_labels.remove(pl)
+
+    # logic behind it : 
+    # FP = predicted labels - accurate labels = labels detected by the model but not in the ground truth
+    # FN = ground truth - accurate labels = labels in the ground truth but not detected by the model
+
+
+    for predicted_label in pred_labels:
+        if predicted_label in true_labels:
+            true_labels.remove(predicted_label)
             try:
-                FP.remove(pl)
+                FP.remove(predicted_label)
             except ValueError:
                 "not in the list"
             try:
-                FN.remove(pl)
+                FN.remove(predicted_label)
             except ValueError:
                 "not in the list"
             try:
-                TP.append(pl)
+                TP.append(predicted_label)
             except ValueError:
                 "not in the list"
     dict_pred['TP'] = TP
     dict_pred['FN'] = FN 
     dict_pred['FP'] = FP
+
+
 
 
 def compute_class_videos_TP_FP_FN(list_especes_predites, list_true_espece):
@@ -484,19 +544,19 @@ def compute_class_videos_TP_FP_FN(list_especes_predites, list_true_espece):
     
     FP = copy.deepcopy(list_especes_predites)
     FN = copy.deepcopy(list_true_espece)
-    for pl in list_especes_predites:
-        if pl in list_true_espece:
-            list_true_espece.remove(pl)
+    for predicted_label in list_especes_predites:
+        if predicted_label in list_true_espece:
+            list_true_espece.remove(predicted_label)
             try:
-                FP.remove(pl)
+                FP.remove(predicted_label)
             except ValueError:
                 "not in the list"
             try:
-                FN.remove(pl)
+                FN.remove(predicted_label)
             except ValueError:
                 "not in the list"
             try:
-                TP.append(pl)
+                TP.append(predicted_label)
             except ValueError:
                 "not in the list"
     dict_pred['TP'] = TP
@@ -663,7 +723,7 @@ def df_to_grouped_csv(path_input_test_csv, path_input_test_per_task_csv):
     dataset_test = pd.read_csv("/home/acarlier/OrnithoScope_keras/keras_yolo2/birds_data_csv/input_test.csv",
                            names=['task_name','xmin','xmax','ymin','ymax','label','h','w'])
     df = copy.deepcopy(dataset_test)
-    df[['_task_name', 'file_name']] = df['task_name'].str.split('/', 1, expand=True)
+    df[['_task_name', 'file_name']] = df['task_name'].str.spredicted_labelit('/', 1, expand=True)
     df_group = df.groupby(['_task_name'])
     for name, group in df_group:
         outfile = f"{name}.csv"

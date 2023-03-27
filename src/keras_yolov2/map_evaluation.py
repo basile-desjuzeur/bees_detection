@@ -71,10 +71,11 @@ class MapEvaluation(Callback):
         # Lists predict boxes per image
         boxes_preds, bad_boxes_preds = {}, {}
 
+        # Lists ious and intersections per image
         ious_global = []
         intersections_global = []
 
-        # Loop on every image of the test
+        # Loop on every image of the dataset to evaluate
         for i in tqdm(range(self._generator.size())):
 
 
@@ -86,27 +87,34 @@ class MapEvaluation(Callback):
                                             score_threshold=self._score_threshold)
             
   
-            # Load true results
-            annotation_i = self._generator.load_annotation(i) #renvoie une liste contenant les annotations de l'image i sous forme des 4 coord + un élé
+            # Load true results of the image as an array of BoundBox like lines
+            annotation_i = self._generator.load_annotation(i) 
 
-            # Conver annotations to BoundBoxes
+            # Convert annotations to BoundBoxes
             if annotation_i != []:
                 true_boxes = [
                     BoundBox(
                         box[0]/img_w, box[1]/img_h, box[2]/img_w, box[3]/img_h, 1,
                         [1 if c == box[4] else 0 for c in range(len(self._label_names))]
                     ) for box in annotation_i
-                ]
-                
+                ]     
             else:
                 true_boxes = []
             
-            
+            #########
+            # Bbox metrics
+            #########
+
             # Compute and add TP, FP and FN to the bbox prediction list
-            bbox_preddicted, ious_img , intersections_img = compute_bbox_TP_FP_FN(pred_boxes, true_boxes, self._label_names)
+            bbox_preddicted, ious_img , intersections_img = compute_bbox_TP_FP_FN(pred_boxes, true_boxes, self._label_names,iou_threshold=self._iou_threshold)
             bbox_predictions.append(bbox_preddicted)
             ious_global.extend(ious_img)
             intersections_global.extend(intersections_img)
+
+            #########
+            # Class metrics
+            #########
+
 
             # Create class predicted dict
             class_preddicted = {} 
@@ -118,17 +126,14 @@ class MapEvaluation(Callback):
                 class_preddicted['true_id'] = 0
                 class_preddicted['true_name'] = ['EMPTY']
             else:
-                class_preddicted['true_id'] = list(annotation_i[:,4])
-        
+                class_preddicted['true_id'] = list(annotation_i[:,4]) #exctraction des id de la liste des boxes prédites
                 class_preddicted['true_name'] = from_id_to_label_name(self._label_names, list(annotation_i[:,4]))#renvoie le nom qui aurait dû être prédit
             
-
             
             # Compute and add TP, FP and FN to the class prediction list
             #A partir de cettel ligne on rajoute TP, FP et FN à class_preddicted
             
-            compute_class_TP_FP_FN(class_preddicted)  #on rajoute au dictionnaire class_preddicted les valeurs TP, FP et FN, par exemple TP=["VERREUR"]
-              
+            compute_class_TP_FP_FN(class_preddicted)  
             class_predictions.append(class_preddicted)
 
             # Store predicted bounding box in 
@@ -143,7 +148,6 @@ class MapEvaluation(Callback):
         class_p_global, class_r_global, class_f1_global = get_p_r_f1_global(class_metrics)
 
 
-
         # Compute P, R and F1 with the bbox metrics
         bbox_metrics = get_precision_recall_from_prediction_box(bbox_predictions, self._label_names)
         bbox_res = results_metrics_per_classes(bbox_metrics)
@@ -151,7 +155,6 @@ class MapEvaluation(Callback):
 
 
         # Compute IoU and intersection for true positives
-
         if len(ious_global) == 0:
             ious_global = 0 
         else:

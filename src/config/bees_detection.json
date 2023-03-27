@@ -17,7 +17,7 @@
         "dataset_csv_file":     "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/inputs/bees_detection_dataset.csv",
         "train_csv_file":       "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/inputs/train.csv",
         "valid_csv_file":       "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/inputs/valid.csv",
-        "test_csv_file":        ["/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/inputs/test.csv"], 
+        "test_csv_file":        ["/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/inputs/test1.csv"], 
         "saved_weight_path":    "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/saved_weights/",
         "saved_pickles_path":   "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/pickles/histories/",
         "evaluations_path":     "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/evaluations/"
