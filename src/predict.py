@@ -295,7 +295,7 @@ def _main_(args):
           cv2.imwrite(os.path.join(image_path, "detected", fname), image)
         elif output_format == 'csv':
           for box in boxes:
-            row = [fname, box.xmin, box.ymin, box.xmax, box.ymax, box.score]
+            row = [fname, box.xmin, box.ymin, box.xmax, box.ymax, box.score,box.get_label()]
             writer.writerow(row)
         elif output_format == 'csv_input':
           image_h, image_w, _ = frame.shape

@@ -50,3 +50,4 @@ for img in img_boxes:
     
     # Save image
     cv2.imwrite(config["data"]["base_path"] + '/badpreds/' + str.replace(img, '/', '_'), frame)
+    

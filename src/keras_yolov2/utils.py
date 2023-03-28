@@ -440,6 +440,18 @@ def from_id_to_label_name(list_label, list_label_id):
 
 def compute_bbox_TP_FP_FN(pred_boxes, true_boxes, list_of_classes, iou_threshold=0.5):
     """ To be applied to a list of predicted boxes and a list of true boxes of the same image.
+    Returns a dictionary with TP, FP and FN labels for each predicted box.
+
+    Args:
+        pred_boxes (list): list of predicted boxes
+        true_boxes (list): list of true boxes
+        list_of_classes (list): list of classes
+        iou_threshold (float): threshold for IoU to consider a predicted box as a TP
+    
+    Returns:
+        predictions (dict): dictionary with TP, FP and FN labels for each predicted box
+        ious_img (list): list of IoUs of True Positives
+        intersections_img (list): list of intersections of True Positives (area of intersection over area of true box)
     """
 
     # Store TP, FP and FN labels
@@ -655,25 +667,6 @@ def print_results_metrics_per_classes(class_res, seen_valid):
             print(f"Specie = {res['Specie']}, Precision = {P} - Rappel = {R} - F-score = {F1} ")
     return np.mean(P_list), np.mean(R_list), np.mean(F1_list)
 
-
-
-# # fonction qui print les metriques par classes p,r,f1,ap
-# def print_results_p_r_f1_ap_per_classes(class_res,seen_valid):
-    # P_list = []
-    # R_list = []
-    # F1_list = []
-    # AP_list=[]
-    # for res in class_res:
-        # if res['Specie'] in seen_valid:
-            # P = res['Precision']
-            # R = res['Rappel']
-            # F1 = res['F-score']
-            # AP=res[]
-            # P_list.append(P)
-            # R_list.append(R)
-            # F1_list.append(F1)
-            # print(f"Specie = {res['Specie']}, Precision = {P} - Rappel = {R} - F-score = {F1} ")
-    # return np.mean(P_list), np.mean(R_list), np.mean(F1_list)
 
 
 #fonction qui calcule l'écart type des F1 score pour toutes les classes

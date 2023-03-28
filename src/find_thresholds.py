@@ -19,11 +19,11 @@ from keras_yolov2.utils import (bbox_iou,
 
 def load_k(k):
     """
-    Loads the k-th image.
+    Loads the k-th image an its annotations
+    :param k: index of the image
+    :return: an array of annotations, each annotation is an array bbox-like (xmin, ymin, xmax, ymax, class)
     """
-
     annots = []
-
 
     # Loop on all objects
     for obj in images[k]['object']:
@@ -45,7 +45,7 @@ pickle_path = "/home/basile/Documents/projet_bees_detection_basile/bees_detectio
 with open(pickle_path, 'rb') as fp:
     img_boxes = pickle.load(fp)
 
-# Path to config filed used to evaluate
+# Path to config file used to evaluate
 config_path = "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/config/bees_detection.json"
 
 # Open config file as a dict
@@ -87,13 +87,15 @@ for iou_threshold in ious:
     res_iou = []
     for score_threshold in scores:
         predictions = []
-        for k, img_name in enumerate(img_boxes):
+
+        # iterate over all images in pickle file
+        for k, img_name in enumerate(img_boxes): 
             pred_boxes = img_boxes[img_name]
 
             # Select boxes with high scores
             pred_boxes = [box.copy() for box in pred_boxes if box.get_score() > score_threshold]
 
-            # NMS
+            # Non max suppression
             for c in range(len(list_labels)):
                 sorted_indices = list(reversed(np.argsort([box.classes[c] for box in pred_boxes])))
 
@@ -124,12 +126,12 @@ for iou_threshold in ious:
             labels_predicted['score'] = score
 
 
-
-            # Store expected values
-            
+            # Store true labels
             try :
+                # Load annotations of the image
                 annotation_k = load_k(k)
 
+                # If there is no objects, create empty result
                 if len(annotation_k[0]) == 0:
                     labels_predicted['true_id'] = 1
                     labels_predicted['true_name'] = ['unknown']
@@ -140,6 +142,7 @@ for iou_threshold in ious:
                 # Compute TP FP FN TN
                 compute_class_TP_FP_FN(labels_predicted)
                 predictions.append(labels_predicted)
+                
 
             except :
                 Exception('Error while loading image : ' + img_name + '')
@@ -193,6 +196,7 @@ now=datetime.now()
 output_path='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/outputs/plots_find_thresholds_on_{}'.format(now.strftime("%d-%m-%Y_%H:%M"))
 os.makedirs(output_path)
 
+# Plot figures
 for i in range(len(titles)):
 
     # Plot figures one by one
@@ -205,7 +209,6 @@ for i in range(len(titles)):
     ax.set_zlabel(zlabels[i % 3])
     plt.colorbar(surf)
     plt.savefig(output_path + '/' + titles[i] + '.png') 
-    plt.show()
 
 # Find the best score and iou for each metric
 best_score = {}
