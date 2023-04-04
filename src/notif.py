@@ -14,7 +14,7 @@ argparser = argparse.ArgumentParser(
 argparser.add_argument(
     '-c',
     '--conf',
-    default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/config/benchmark_config/Mobilenet_sampling_valid_train_inat.json',
+    default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/config/config.json',
     help='Path to config file.')
 
 CODE_QUOTES = '```'

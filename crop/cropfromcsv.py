@@ -5,9 +5,9 @@ from PIL import Image
 from tqdm import tqdm
 
 
-source_path = '/home/basile/Documents/projet_bees_detection_basile/data_bees_detection/Anthophila'
-target_path ='/home/basile/Documents/projet_bees_detection_basile/data_bees_detection/Cropped_Anthophila'
-
+source_path = '/home/basile/Documents/projet_bees_detection_basile/data_bees_detection/test_2'
+target_path ='/home/basile/Documents/projet_bees_detection_basile/data_bees_detection/test_cropped'
+csv_path = '/home/basile/Documents/projet_bees_detection_basile/data_bees_detection/test_2q/Detections/test_2_merged.csv'
 
 def crop_image(img_path, x, y, w, h):
     '''
@@ -18,20 +18,14 @@ def crop_image(img_path, x, y, w, h):
     
     return img 
 
-def crop_images(source_path, target_path):
+def crop_images(source_path, target_path, csv_path):
     '''
     After having run predict.py, we have a csv file with the detected bees in the source_path.
     This function crops the images and saves them in the target_path.
     Creates a csv file with the cropped images so that it can be used to train a classifier.
     Format of the csv file:
-    file_path, xmin, ymin, xmax, ymax, class_name
+    file_path, xmin, ymin, xmax, ymax, class_name, width, height
     '''
-
-    # find the csv file in source path 
-    for file in os.listdir(source_path):
-        if file.endswith('.csv') and file.__contains__('detected'):
-            csv_path = os.path.join(source_path, file)
-            break
 
     # read the csv file
     df_detected = pd.read_csv(csv_path,names=['file_path','xmin','ymin','xmax','ymax','class_name','width','height'],sep=',',index_col=False)
@@ -110,4 +104,4 @@ def crop_images(source_path, target_path):
 
 if __name__ == '__main__':
 
-    crop_images(source_path, target_path)
+    crop_images(source_path, target_path, csv_path)

@@ -13,6 +13,7 @@ argparser.add_argument(
     help='Path to configuration file')
 
 
+
 def main(args):
     config_path = args.conf
 

@@ -28,7 +28,7 @@ argparser.add_argument(
 argparser.add_argument(
   '-w',
   '--weights',
-  default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/saved_weights/best_model_bestLoss_bestLoss.h5',
+  default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/saved_weights/best_model_bestLoss_bestLoss_bestLoss.h5',
   type=str,
   help='path to pretrained weights')
 
@@ -57,7 +57,7 @@ argparser.add_argument(
   '--output',
   default='img',
   type=str,
-  help='Output format, img (default) or csv')
+  help='Output format, img (default) or csv / csv_input') # set to csv_input
 
 
 def _main_(args):
@@ -245,16 +245,28 @@ def _main_(args):
 
   ### Image
   else:
+
+    count_errors=0
+    errors=[]
+
     # One image
     if os.path.isfile(image_path):
+
       # Open image
       frame = cv2.imread(image_path)
 
       # Predict
-      boxes = yolo.predict(frame)
+      try:
+        boxes = yolo.predict(frame,
+                              iou_threshold=config['valid']['iou_threshold'],
+                              score_threshold=config['valid']['score_threshold'])
+      except:
+        count_errors+=1
+        errors.append(image_path)
+        print("Error happened with ",image_path)
+        return 
 
       #Avec bbox_iou on veut calculer le iou score de toutes les bounding boxes prédites et les afficher
-
       for i in range(len(boxes)):
         for j in range(len(boxes)):
           if i != j:
@@ -281,22 +293,40 @@ def _main_(args):
         writer = csv.writer(f)
 
       images = list(list_images(image_path))
-      for fname in tqdm(images):
-        frame = cv2.imread(fname)
 
+      if len(images) == 0:
+        raise Exception("No images found in {}, it may be due to the fact that images have no extension in their file name, if so, run /home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/inputs/put_extension.py".format(image_path))
+      
+      for fname in tqdm(images):
+        # Open image
+        frame = cv2.imread(fname)
+        
         # Predict
-        boxes = yolo.predict(frame,
+
+        try:
+          boxes = yolo.predict(frame,
                               iou_threshold=config['valid']['iou_threshold'],
                               score_threshold=config['valid']['score_threshold'])
+        
+        except:
+          print("Error with image {}".format(fname))
+          count_errors+=1
+          errors.append(fname)
+          continue 
 
         if output_format == 'img':
           image = draw_boxes(frame, boxes, config['model']['labels'])
           fname = os.path.basename(fname)
           cv2.imwrite(os.path.join(image_path, "detected", fname), image)
+
+
+        # sum up the detection
         elif output_format == 'csv':
           for box in boxes:
             row = [fname, box.xmin, box.ymin, box.xmax, box.ymax, box.score,box.get_label()]
             writer.writerow(row)
+
+        # good for image classif    
         elif output_format == 'csv_input':
           image_h, image_w, _ = frame.shape
           for box in boxes:
@@ -314,6 +344,18 @@ def _main_(args):
               
       if output_format.startswith('csv'):
         f.close()
+
+  # Errors handling
+  if count_errors > 0:
+    print("Errors occured on {} pictures".format(count_errors))
+
+    # store the errors in a text file
+    with open(os.path.join(image_path, "errors.txt"), "w") as f:
+      for error in errors:
+        f.write(error) 
+
+    print("Exhaustive count of errors stored in {}".format(os.path.join(image_path, "errors.txt")))
+
   
 
 if __name__ == '__main__':

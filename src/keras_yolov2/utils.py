@@ -112,8 +112,18 @@ def bbox_intersection_proportion(pred_box, true_box):
 
 
 def draw_boxes(image, boxes, labels):
+    """
+    Draw the boxes on the image with the specific label
+    :param image: the image to draw on ; after cv2.imread
+    :param boxes: the boxes to draw; as a list of BoundBox objects
+    :param labels: the labels ; as a list of strings
+    :return: the image
+    """
+
     image_h, image_w, _ = image.shape
 
+    # Define colors for the bounding boxes, colors are a combination of RGB
+    # values in color_levels
     color_levels = [0, 255, 128, 64, 32]
     colors = []
     for r in color_levels:
@@ -123,12 +133,23 @@ def draw_boxes(image, boxes, labels):
                     continue
                 colors.append((b, g, r))
 
-    for box in boxes:
-        xmin = int(box.xmin * image_w)
-        ymin = int(box.ymin * image_h)
-        xmax = int(box.xmax * image_w)
-        ymax = int(box.ymax * image_h)
 
+    for box in boxes:
+
+        # Coordinates may be relative or absolute as input
+        # If relative, convert to absolute
+        if box.xmin > 1 or box.xmax > 1 or box.ymin > 1 or box.ymax > 1:
+            xmin = int(box.xmin)
+            ymin = int(box.ymin)
+            xmax = int(box.xmax)
+            ymax = int(box.ymax)
+        else:
+            xmin = int(box.xmin * image_w)
+            ymin = int(box.ymin * image_h)
+            xmax = int(box.xmax * image_w)
+            ymax = int(box.ymax * image_h)
+    
+        # Draw the bounding box
         line_width_factor = int(min(image_h, image_w) * 0.005)
         cv2.rectangle(image, (xmin, ymin), (xmax, ymax), colors[box.get_label()], line_width_factor * 2)
         cv2.putText(image, "{} {:.3f}".format(labels[box.get_label()], box.get_score()),
@@ -389,16 +410,19 @@ def import_feature_extractor(backend, input_size, freeze=False, finetune=False):
 
 # these funcition are from imutils, you can check this library here: https://github.com/jrosebr1/imutils
 # just added this function to have less dependencies
-def list_images(base_path, valid_exts=(".jpg", ".jpeg", ".png", ".bmp", ".tif", ".tiff"), contains=None):
+def list_images(base_path, valid_exts=(".jpg", ".jpeg",'.JPEG' ".png", ".bmp", ".tif", ".tiff"), contains=None):
     # return the set of files that are valid
     return list_files(base_path, valid_exts, contains=contains)
 
 
 def list_files(base_path, valid_exts="", contains=None):
+
     # loop over the directory structure
     for (rootDir, dirNames, filenames) in os.walk(base_path):
+
         # loop over the filenames in the current directory
         for filename in filenames:
+
             # if the contains string is not none and the filename does not contain
             # the suppredicted_labelied string, then ignore the file
             if contains is not None and filename.find(contains) == -1:

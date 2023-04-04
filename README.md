@@ -1,4 +1,4 @@
-<h1 align="center">Project OrnithoScope</h3>
+<h1 align="center">Project Bees_detection</h3>
 
 
 <!-- TABLE OF CONTENTS -->
@@ -26,7 +26,7 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About the project
-Developed for the ECONNECT project (CNRS-LEFE), OrnithoScope ensures the automatic detection of birds by Deep Learning. Here we developed an algorithm based on MobileNet and YOLO for Raspberry PI.
+Developed for the ECONNECT project (CNRS-LEFE), BeesDetection ensures the automatic detection of bees by Deep Learning. Here we developed an algorithm based on MobileNet and YOLO for Raspberry PI.
 
 
 <!-- GETTING STARTED -->
@@ -93,4 +93,5 @@ python3 predict.py -c path_custom_config.json -w path_seleccted_weights.h5 -i pa
 
 <!-- CONTACT -->
 # Contact
+Basile Desjuzeur
 Rondier acarlier (https://www.linkedin.com/in/acarlier-rondier/)

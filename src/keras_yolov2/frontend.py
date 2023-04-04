@@ -68,7 +68,6 @@ class YOLO(object):
         
 
         # make the object detection layer: on ajoute une couche de convolution pour détecter les objets
-        
         output = Conv2D(self._nb_box * (4 + 1 + self._nb_class),
                         (1, 1), strides=(1, 1),
                         padding='same',
@@ -276,24 +275,6 @@ class YOLO(object):
     def predict(self, image, iou_threshold=0.5, score_threshold=0.5):
 
         input_image = self.resize(image)
-
-        # ### TFLite
-        # if self._tflite:
-
-        #     # Extract details
-        #     input_details = self._interpreter.get_input_details()
-        #     output_details = self._interpreter.get_output_details()
-        #     input_type = input_details[0]['dtype']
-
-        #     # Convert frame to input type
-        #     input_image = input_image.astype(input_type)
-
-        #     # Predict
-        #     self._interpreter.set_tensor(input_details[0]['index'], input_image)
-        #     self._interpreter.invoke()
-        #     netout = self._interpreter.get_tensor(output_details[0]['index'])[0]
-
-        ### TF
         
         netout = self._model.predict(input_image)[0]
 
