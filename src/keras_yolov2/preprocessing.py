@@ -520,21 +520,7 @@ class BatchGenerator(Sequence):
 
         cap = 200 #à passer en config
 
-        # Initialize counter
-        counter = {label: 0 for label in self._config['LABELS']}
-
-        # Group images per species
-        image_per_specie = {label: [] for label in self._config['LABELS']}
-        for image in self._raw_images:
-            for box in image['object']:
-                image_per_specie[box['name']].append(image)
-        
-        # Shuffle a bit
-        for image_list in image_per_specie.values():
-            np.random.shuffle(image_list)
-        
-        # Loop to complete each species from the rarest
-        counter_min_key = min(counter, key=counter.get)
+        # Initialize countergen_data
         counter_min = counter[counter_min_key]
         while counter_min < cap:
             # Take the first picture and replace it in the queue

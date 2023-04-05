@@ -2,6 +2,7 @@ import json
 import cv2
 import time
 import datetime
+from datetime import datetime
 import argparse
 import os
 import csv
@@ -28,7 +29,7 @@ argparser.add_argument(
 argparser.add_argument(
   '-w',
   '--weights',
-  default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/saved_weights/best_model_bestLoss_bestLoss_bestLoss.h5',
+  default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/saved_weights/best_model_bestLoss_bestLoss.h5',
   type=str,
   help='path to pretrained weights')
 
@@ -245,7 +246,6 @@ def _main_(args):
 
   ### Image
   else:
-
     count_errors=0
     errors=[]
 
@@ -260,6 +260,7 @@ def _main_(args):
         boxes = yolo.predict(frame,
                               iou_threshold=config['valid']['iou_threshold'],
                               score_threshold=config['valid']['score_threshold'])
+        
       except:
         count_errors+=1
         errors.append(image_path)
@@ -278,17 +279,26 @@ def _main_(args):
       # Write image output                                                      # no csv for single file 
       cv2.imwrite(image_path[:-4] + '_lite_detected' + image_path[-4:], frame)  ## problem for jpeg vs jpg ... os.path.splitext
   
+
+
     # Image folder
     else:
       if output_format == 'img':
-        # Create output image file/folder
-        detected_images_path = os.path.join(image_path, "detected")
+
+        # Create output image folder
+        detected_images_path = os.path.join(image_path, "detected_images")
+
         if not os.path.exists(detected_images_path):
           os.mkdir(detected_images_path) 
 
       elif output_format.startswith('csv'):
+
         # Create output csv
-        detected_csv = os.path.join(image_path, "detected.csv")       # image_path == input_path (i.e. folder_path)
+        # Create output image file/folder as input f
+        now=datetime.now()
+        path='/home/basile/Documents/projet_bees_detection_basile/bees_detection/crop/data/predict_csv/'
+        detected_csv = os.path.join(path, "detected_images_{}".format(now.strftime("%Y-%m-%d_%H-%M")))
+
         f = open(detected_csv, 'w')
         writer = csv.writer(f)
 
