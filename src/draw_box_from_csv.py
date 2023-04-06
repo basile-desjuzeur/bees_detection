@@ -3,8 +3,13 @@ import cv2
 import pandas as pd
 
 
-path_to_csv = '/home/basile/Documents/projet_bees_detection_basile/data_bees_detection/test_2/Detections/test_2_merged.csv'
+path_to_csv = '/home/basile/Documents/projet_bees_detection_basile/bees_detection/crop/data/predict_csv/detected_images_2023-04-05_15-41.csv'
+path_to_output_base='/home/basile/Documents/projet_bees_detection_basile/bees_detection/crop/data/images_with_bbox'
 
+# Get the folder name
+folder_name = path_to_csv.split(os.path.sep)[-1]
+folder_name = folder_name.split('.')[0]
+pathe_to_output = os.path.join(path_to_output_base,folder_name)
 
 def convert_bbox_to_absolute(xmin,ymin,xmax,ymax,width,height):
 
@@ -35,7 +40,7 @@ def convert_bbox_to_absolute(xmin,ymin,xmax,ymax,width,height):
 
     return xmin,ymin,xmax,ymax,width,height
 
-def draw_bbox_from_csv(path_to_csv,path_to_output=None):
+def draw_bbox_from_csv(path_to_csv,path_to_output):
     """
     Draw bounding boxes from a csv file containing the following columns:
     - filepath, xmin, ymin, xmax, ymax, label, width, height
@@ -43,9 +48,6 @@ def draw_bbox_from_csv(path_to_csv,path_to_output=None):
     """
 
     # Creates the output folder if it doesn't exist
-    if path_to_output is None:
-        path_to_output = os.path.join(os.path.dirname(path_to_csv), 'with_drawn_bbox')
-
     if not os.path.exists(path_to_output):
         os.makedirs(path_to_output)
 
@@ -76,6 +78,6 @@ def draw_bbox_from_csv(path_to_csv,path_to_output=None):
 
 if __name__ == '__main__':
 
-    draw_bbox_from_csv(path_to_csv)
+    draw_bbox_from_csv(path_to_csv,pathe_to_output)
 
 

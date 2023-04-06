@@ -197,7 +197,7 @@ def draw_true_boxes(image, boxes, labels):
     return image
 
 
-def decode_netout(netout, anchors, nb_class, obj_threshold=0.5, nms_threshold=0.3): #on transforme ce qui sort du réseau en bounding boxes
+def decode_netout(netout, anchors, nb_class, obj_threshold, nms_threshold): #on transforme ce qui sort du réseau en bounding boxes
     grid_h, grid_w, nb_box = netout.shape[:3]
 
     boxes = []

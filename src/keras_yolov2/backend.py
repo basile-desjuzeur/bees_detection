@@ -3,7 +3,7 @@ import tensorflow as tf
 from keras.models import Model
 # from tensorflow.keras.applications.efficientnet_v2 import EfficientNetV2B0, EfficientNetV2B1
 from keras.applications.mobilenet import MobileNet
-# from tensorflow.keras.applications.resnet50 import ResNet50
+from tensorflow.keras.applications.resnet50 import ResNet50
 # from tensorflow.keras.applications.resnet import ResNet101
 # from tensorflow.keras.applications.vgg16 import VGG16
 ## from keras applications import InceptionV3

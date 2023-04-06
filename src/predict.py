@@ -29,7 +29,7 @@ argparser.add_argument(
 argparser.add_argument(
   '-w',
   '--weights',
-  default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/saved_weights/best_model_bestLoss_bestLoss.h5',
+  default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/saved_weights/MobileNet_04_03.h5',
   type=str,
   help='path to pretrained weights')
 
@@ -51,13 +51,14 @@ argparser.add_argument(
   '-i',
   '--input',
   type=str,
-  help='path to an image or an video (mp4 format)')
+  default='/home/basile/Documents/projet_bees_detection_basile/data_bees_detection/whole_dataset/Anthophila/Amegilla quadrifasciata',
+  help='path to an image, a video or a folder of images')
 
 argparser.add_argument(
   '-o',
   '--output',
-  default='img',
   type=str,
+  default='csv_input',
   help='Output format, img (default) or csv / csv_input') # set to csv_input
 
 
@@ -297,7 +298,7 @@ def _main_(args):
         # Create output image file/folder as input f
         now=datetime.now()
         path='/home/basile/Documents/projet_bees_detection_basile/bees_detection/crop/data/predict_csv/'
-        detected_csv = os.path.join(path, "detected_images_{}".format(now.strftime("%Y-%m-%d_%H-%M")))
+        detected_csv = os.path.join(path, "detected_images_{}.csv".format(now.strftime("%Y-%m-%d_%H-%M")))
 
         f = open(detected_csv, 'w')
         writer = csv.writer(f)

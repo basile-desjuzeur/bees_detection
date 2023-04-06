@@ -15,12 +15,12 @@ from keras_yolov2.yolo_loss import YoloLoss
 from datetime import datetime
 
 argparser = argparse.ArgumentParser(
-    description='Train and validate YOLO_v2 model on any dataset')
+    description='Find the best learning rate for the model in the config file')
 
 argparser.add_argument(
     '-c',
     '--conf',
-    default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/config/bees_detection.json',
+    default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/config/bees_detection_resnet.json',
     help='path to configuration file')
 
 
@@ -83,7 +83,7 @@ def _main_(args):
 
     config['train']['optimizer']['lr_scheduler']['name'] = 'None'
 
-    lr_finder_callback = LRFinder(start_lr=1e-7, end_lr=10, max_steps=150, smoothing=0.9)
+    lr_finder_callback = LRFinder(start_lr=1e-9, end_lr=1e-6, max_steps=150, smoothing=0.9)
 
     yolo.train(train_imgs=train_imgs,
                valid_imgs=valid_imgs,

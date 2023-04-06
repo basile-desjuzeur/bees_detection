@@ -30,7 +30,7 @@ def _plot_history_(args):
     saved_weights_file_name=root.split(os.sep)[-1]
     #pickle_path = f'{saved_pickle_path}/history/history_{root}_bestLoss{ext}.p'
     #pickle_path=f'{saved_pickle_path}/benchmark_weights/best_model_bestLoss{ext}.p'
-    pickle_path = f'{saved_pickle_path}/history/{saved_weights_file_name}_bestLoss{ext}.p'
+    pickle_path = f'{saved_pickle_path}history/{saved_weights_file_name}_bestLoss{ext}.p'
 
     # Load history pickle
     with open(pickle_path, 'rb') as pickle_buffer:

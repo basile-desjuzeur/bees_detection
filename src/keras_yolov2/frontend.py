@@ -16,7 +16,6 @@ from tensorflow.keras.optimizers.schedules import CosineDecayRestarts, Exponenti
 
 
 from history import _plot_history_ ## later 
-import datetime
 from .map_evaluation import MapEvaluation
 from .preprocessing import BatchGenerator
 from .utils import decode_netout, import_feature_extractor, import_dynamically
@@ -114,7 +113,7 @@ class YOLO(object):
     def train(self, train_imgs,  # the list of images to train the model
               valid_imgs,  # the list of images used to validate the model
               train_times,  # the number of time to repeat the training set, often used for small datasets
-              nb_epochs,  # number of epoches
+              nb_epochs,  # number of epoches"decay":                        
               learning_rate,  # the learning rate
               batch_size,  # the size of the batch
               object_scale,
@@ -263,7 +262,7 @@ class YOLO(object):
         # Save history as pickle
         saved_weights_file_name=root.split(os.sep)[-1]
         if self._saved_pickles_path != '':
-            pickle_file_path = f'{self._saved_pickles_path}/history/{saved_weights_file_name}_bestLoss_on{datetime.datetime.now()}_{ext}.p'
+            pickle_file_path = f'{self._saved_pickles_path}history/{saved_weights_file_name}_bestLoss{ext}.p'
             pickel_dir_path ='/'.join(pickle_file_path.split('/')[:-1])
             if not os.path.exists(pickel_dir_path):
                 os.makedirs(pickel_dir_path)
@@ -272,7 +271,7 @@ class YOLO(object):
         print('Fin du train, les poids ont été sauvergardés dans le fichier : {}'.format(pickle_file_path))
 
 
-    def predict(self, image, iou_threshold=0.5, score_threshold=0.5):
+    def predict(self, image, iou_threshold, score_threshold):
 
         input_image = self.resize(image)
         
@@ -327,7 +326,7 @@ class YOLO(object):
                     beta_1=beta_1,
                     beta_2=beta_2,
                     epsilon=epsilon,
-                    decay=decay
+                    #decay=decay
                 ), lr_callbacks
         
         if optimizer_config['name'] == 'SGD':

@@ -3,8 +3,8 @@ cuda/*
 _pycache_/*
 .ipynb_checkpoints/*
 old/*
-data/*
+src/data/*
 Metriques.docx
 Fonctionnement.odt
 data_bees_detection/*  
-/home/basile/Documents/projet_bees_detection_basile/data_bees_detection/test/*
+crop/data/*

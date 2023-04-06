@@ -385,8 +385,6 @@ class BatchGenerator(Sequence):
             exit(1)
 
     def __getitem__(self, idx):
-        print(idx)
-        print(len(self._images))
         # Set lower an upper id for this batch
         l_bound = idx * self._config['IMG_PER_BATCH']
         r_bound = (idx + 1) * self._config['IMG_PER_BATCH']
@@ -519,8 +517,21 @@ class BatchGenerator(Sequence):
         self._images = []
 
         cap = 200 #à passer en config
+        # Initialize counter
+        counter = {label: 0 for label in self._config['LABELS']}
 
-        # Initialize countergen_data
+        # Group images per species
+        image_per_specie = {label: [] for label in self._config['LABELS']}
+        for image in self._raw_images:
+            for box in image['object']:
+                image_per_specie[box['name']].append(image)
+        
+        # Shuffle a bit
+        for image_list in image_per_specie.values():
+            np.random.shuffle(image_list)
+        
+        # Loop to complete each species from the rarest
+        counter_min_key = min(counter, key=counter.get)
         counter_min = counter[counter_min_key]
         while counter_min < cap:
             # Take the first picture and replace it in the queue
