@@ -11,12 +11,21 @@ The folders are structured differently :
     for some it is , name_of_folder/specie/observator/subfolders/img 
 
 - some are flat, there the label is contained in the name of the file , we use regex to get it
+
+We dont take BD_71 as it is composed of pictures from all the other datasets
 """
 
 
 path_to_dataset = "/home/basile/Documents/projet_bees_detection_basile/data_bees_detection/whole_dataset"
-dir_hierarchical = ['Anthophila', 'BD_71', 'DG', 'HS', 'LMDI']
+dir_anthophila = 'Anthophila'
+dir_DG = 'DG'
+dir_other = [ 'Anthophila', 'DG']
+dir_hierarchical = [ 'HS', 'LMDI']
 dir_flat = ['iNaturalist', 'Spipoll']
+dirs = dir_other + dir_hierarchical + dir_flat
+path_csv = '/home/basile/Documents/projet_bees_detection_basile/bees_detection/crop/data/files_in_whole_dataset_with_real_labels'
+path_whole_dataset_csv = '/home/basile/Documents/projet_bees_detection_basile/bees_detection/crop/data/files_in_whole_dataset_with_real_labels/whole_dataset.csv'
+output_path = '/home/basile/Documents/projet_bees_detection_basile/bees_detection/crop/data/files_in_whole_dataset_with_real_labels/number_of_images_per_specie_per_dataset.csv'
 
 
 def clean_Anthophila_folder(path_to_dataset):
@@ -51,7 +60,6 @@ def clean_Anthophila_folder(path_to_dataset):
                 subfolder = os.path.sep.join(img_path.split(os.path.sep)[:-1])
                 os.system("rm -r '" + subfolder + "'")
 
-
 def get_number_of_image_Anthophila(path_to_dataset):
     """
     For folders hierarchically structured, label is the last folder
@@ -78,7 +86,6 @@ def get_number_of_image_Anthophila(path_to_dataset):
         {'Paths': paths, 'Real labels': labels})
 
     return df_hierarchical_folder
-
 
 def get_number_of_image_hierarchical(path_to_dataset):
     """
@@ -107,7 +114,6 @@ def get_number_of_image_hierarchical(path_to_dataset):
 
     return df_hierarchical_folder
 
-
 def get_number_of_image_flat(path_to_dataset):
     '''
     Images are stored like this :
@@ -135,7 +141,7 @@ def get_number_of_image_flat(path_to_dataset):
 
     return df
 
-def clean_DG_labels(path='/home/basile/Documents/projet_bees_detection_basile/bees_detection/crop/data/files_in_whole_dataset_with_real_labels/DG.csv'):
+def clean_DG_labels(path):
     """
     DG labels are like this :
     Lasioglossum (Evylaeus) corvinum
@@ -155,21 +161,14 @@ def clean_DG_labels(path='/home/basile/Documents/projet_bees_detection_basile/be
 
     return
 
-
-paths = ['/home/basile/Documents/projet_bees_detection_basile/bees_detection/crop/data/files_in_whole_dataset_with_real_labels/Inat.csv',
-         '/home/basile/Documents/projet_bees_detection_basile/bees_detection/crop/data/files_in_whole_dataset_with_real_labels/LMDI.csv',
-         '/home/basile/Documents/projet_bees_detection_basile/bees_detection/crop/data/files_in_whole_dataset_with_real_labels/Spipoll.csv',
-         '/home/basile/Documents/projet_bees_detection_basile/bees_detection/crop/data/files_in_whole_dataset_with_real_labels/BD_71.csv',
-         '/home/basile/Documents/projet_bees_detection_basile/bees_detection/crop/data/files_in_whole_dataset_with_real_labels/HS.csv',
-         '/home/basile/Documents/projet_bees_detection_basile/bees_detection/crop/data/files_in_whole_dataset_with_real_labels/Anthophila.csv',
-         '/home/basile/Documents/projet_bees_detection_basile/bees_detection/crop/data/files_in_whole_dataset_with_real_labels/DG.csv']
-
-path_whole_dataset = '/home/basile/Documents/projet_bees_detection_basile/bees_detection/crop/data/files_in_whole_dataset_with_real_labels/whole_dataset.csv'
-
-def merge_csv(paths=paths):
+def merge_csv(paths=path_csv,dirs=dirs, path_whole_dataset=path_whole_dataset_csv):
+    
     """
     Merge all the csv files in one
     """
+    
+    paths = [os.path.join(paths, dir + '.csv') for dir in dirs]
+
 
     # Merges all the csv files in one, one after the other
     dfs = [pd.read_csv(path) for path in paths]
@@ -178,9 +177,7 @@ def merge_csv(paths=paths):
 
     df.to_csv(path_whole_dataset, index=False)
 
-output_path = '/home/basile/Documents/projet_bees_detection_basile/bees_detection/crop/data/files_in_whole_dataset_with_real_labels/number_of_images_per_specie_per_dataset.csv'
-
-def get_nb_per_specie_per_dataset(paths=paths, path_whole_dataset=path_whole_dataset):
+def get_nb_per_specie_per_dataset(paths=path_csv, dirs =dirs,  path_whole_dataset=path_whole_dataset_csv, output_path=output_path):
     """
     Get the number of images per specie per dataset
     Concatenate all the dataframes in one
@@ -192,7 +189,9 @@ def get_nb_per_specie_per_dataset(paths=paths, path_whole_dataset=path_whole_dat
     df = df['Real labels'].value_counts().reset_index()
     df.columns = ['Specie', 'Total']
 
-    df.to_csv(output_path, index=False)
+    # list of paths to the csv files
+
+    paths = [os.path.join(path_csv,dir +'.csv') for dir in dirs]
 
     # Get the number of images per specie per dataset
 
@@ -218,6 +217,53 @@ def get_nb_per_specie_per_dataset(paths=paths, path_whole_dataset=path_whole_dat
  
     return
 
+
 if __name__ == '__main__': 
+
+    path = os.path.join(path_to_dataset, dir_anthophila)
+
+    #####  Antophila #####
+
+    # clean_Anthophila_folder(path)
+
+    df = get_number_of_image_Anthophila(path)
+
+    df.to_csv( os.path.join(path_csv,dir_anthophila+'.csv'), index=False)
+
+    #####  Hierarchical folder #####
+
+    for dir in  dir_hierarchical:
+
+        path = os.path.join(path_to_dataset, dir)
+
+        df = get_number_of_image_hierarchical(path)
+
+        df.to_csv(os.path.join(path_csv,dir +'.csv'), index=False)
+
+    #####  Flat folder #####
+
+    for dir in  dir_flat:
+
+        path = os.path.join(path_to_dataset, dir)
+
+        df = get_number_of_image_flat(path)
+
+        df.to_csv(os.path.join(path_csv,dir +'.csv'), index=False)
+
+    #####  DG #####
+
+    path = os.path.join(path_to_dataset, dir_DG)
+
+    df = get_number_of_image_hierarchical(path)
+
+    df.to_csv(os.path.join(path_csv,dir_DG+'.csv'), index=False)
+
+    clean_DG_labels(os.path.join(path_csv,dir_DG+'.csv'))
+
+    #####  Merge all the csv files #####
+
+    merge_csv()
+
+    #####  Get the number of images per specie per dataset #####
 
     get_nb_per_specie_per_dataset()

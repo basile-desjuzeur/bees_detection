@@ -22,14 +22,14 @@ argparser = argparse.ArgumentParser(
 argparser.add_argument(
   '-c',
   '--conf',
-  default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/config/bees_detection.json',
+  default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/config/bees_detection_resnet.json',
   type=str,
   help='path to configuration file')
 
 argparser.add_argument(
   '-w',
   '--weights',
-  default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/saved_weights/MobileNet_04_03.h5',
+  default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/saved_weights/ResNet_bestLoss.h5',
   type=str,
   help='path to pretrained weights')
 
@@ -355,6 +355,9 @@ def _main_(args):
               
       if output_format.startswith('csv'):
         f.close()
+
+      print("Predictions saved in {}".format(detected_csv))
+
 
   # Errors handling
   if count_errors > 0:

@@ -3,7 +3,7 @@ import cv2
 import pandas as pd
 
 
-path_to_csv = '/home/basile/Documents/projet_bees_detection_basile/bees_detection/crop/data/predict_csv/detected_images_2023-04-05_15-41.csv'
+path_to_csv = '/home/basile/Documents/projet_bees_detection_basile/bees_detection/crop/data/predict_csv/detected_images_2023-04-07_10-48.csv'
 path_to_output_base='/home/basile/Documents/projet_bees_detection_basile/bees_detection/crop/data/images_with_bbox'
 
 # Get the folder name

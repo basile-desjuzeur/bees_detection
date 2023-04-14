@@ -25,7 +25,7 @@ argparser.add_argument(
 argparser.add_argument(
     '-w',
     '--weights',
-    default='',
+    default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/saved_weights/MobileNet_04_03.h5',
     help='path to pretrained weights')
 
 argparser.add_argument( 

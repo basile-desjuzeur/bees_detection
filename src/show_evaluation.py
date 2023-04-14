@@ -7,7 +7,7 @@ import pandas as pd
 from keras_yolov2.utils import draw_boxes, draw_true_boxes,BoundBox
 
 # Path to evaluation history (bad boxes)
-pickle_path = "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/pickles/histories/MobileNetV2-alpha=1.0_2023-03-23-17:21:53_0/temp_csv_all_species/bad_boxes_MobileNetV2-alpha=1.0_temp_csv_all_species.p"
+pickle_path = "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/pickles/histories/ResNet50_2023-04-06-17:45:47_0/test/bad_boxes_ResNet50_test.p"
 
 # Open pickle
 with open(pickle_path, 'rb') as fp:
@@ -15,7 +15,7 @@ with open(pickle_path, 'rb') as fp:
 
 
 # Path to config filed use to evaluate
-config_path = "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/config/bees_detection.json"
+config_path = "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/config/bees_detection_resnet.json"
 
 # Open config file as a dict
 with open(config_path) as config_buffer:

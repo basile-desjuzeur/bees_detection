@@ -46,7 +46,7 @@ with open(pickle_path, 'rb') as fp:
     img_boxes = pickle.load(fp)
 
 # Path to config file used to evaluate
-config_path = "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/config/bees_detection.json"
+config_path = "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/config/bees_detection_resnet.json"
 
 # Open config file as a dict
 with open(config_path) as config_buffer:
