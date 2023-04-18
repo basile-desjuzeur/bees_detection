@@ -26,14 +26,14 @@ argparser = argparse.ArgumentParser(
 argparser.add_argument(
   '-c',
   '--conf',
-  default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/config/bees_detection.json',
+  default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/config/bees_detection.json',
   type=str,
   help='path to configuration file')
 
 argparser.add_argument(
   '-w',
   '--weights',
-  #default="/home/basile/Documents/projet_bees_detection/bees_detection/src/data/saved_weights/best_model_bestLoss.h5",
+  #default="/home/basile/Documents/projet_bees_detection/bees_detection/src/yolo/data/saved_weights/best_model_bestLoss.h5",
   type=str,
   help='path to pretrained weights')
 

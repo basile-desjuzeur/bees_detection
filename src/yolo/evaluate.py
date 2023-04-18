@@ -20,13 +20,13 @@ argparser = argparse.ArgumentParser(
 argparser.add_argument(
     '-c',
     '--conf',
-    default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/config/bees_detection_resnet_copy.json',
+    default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/config/bees_detection_mobilenet_retrain.json',
     help='path to configuration file')
 
 argparser.add_argument(
     '-w',
     '--weights',
-    default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/saved_weights/ResNet_bestLoss.h5',
+    default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/data/saved_weights/MobileNet_retrain_bestLoss.h5',
     help='path to pretrained weights')
 
 argparser.add_argument(
@@ -95,9 +95,10 @@ def _main_(args):
     #   Load the pretrained weights (if any)
     #########################################
 
+
     if weights_path != '':
         print("Loading pre-trained weights in", weights_path)
-        yolo.load_weights(weights_path)
+        yolo.load_weights(weights_path) 
     elif os.path.exists(config['train']['pretrained_weights']):
         print("Loading pre-trained weights in",
               config['train']['pretrained_weights'])
@@ -107,6 +108,7 @@ def _main_(args):
 
     # Use tflite
     if lite_path != '':
+
         yolo.load_lite(lite_path)
 
     #########################
@@ -137,7 +139,8 @@ def _main_(args):
     for test_csv_file in test_csv_files:
 
         if os.path.exists(test_csv_file):
-            print(f"\n \nParsing {test_csv_file.split('/')[-1]}")
+            print(f"\n \nParsing {test_csv_file.split('/')[-1]}\n \n")
+
             test_imgs, seen_valid_labels = parse_annotation_csv(test_csv_file,
                                                                 config['model']['labels'],
                                                                 config['data']['base_path'])
@@ -161,27 +164,33 @@ def _main_(args):
                                             norm=yolo._feature_extractor.normalize,
                                             jitter=False,
                                             shuffle=False)
+            
             test_eval = MapEvaluation(yolo, test_generator,
                                       iou_threshold=config['valid']['iou_threshold'],
                                       score_threshold=config['valid']['score_threshold'],
                                       label_names=config['model']['labels'],
                                       model_name=config['model']['backend'])
 
-            print('Number of valid images: ', len(test_imgs))
+            print('\nNumber of valid images: \n', len(test_imgs))
 
-            print('Computing metrics per classes...')
+            print('\nComputing metrics per classes...\n')
+
             (boxes_preds, bad_boxes_preds,
              class_predictions, class_metrics, class_res, class_p_global, class_r_global, class_f1_global,
              bbox_predictions, bbox_metrics, bbox_res, bbox_p_global, bbox_r_global, bbox_f1_global,
              ious_global, intersections_global
              ) = test_eval.compute_P_R_F1()
-            print('Done.')
+            
+            print('\nMetrics computed\n')
 
             test_name = test_csv_file.split('/')[-1].split('.')[0]
+
             print("For", test_name)
             print('VALIDATION LABELS: ', seen_valid_labels)
 
-            print('Final results:')
+            print ('-'*70)
+            print('\033[1m'+'\n\tFinal results:')
+
 
             print('\nClass metrics:')
             class_mean_P, class_mean_R, class_mean_F1 = print_results_metrics_per_classes(
@@ -202,6 +211,7 @@ def _main_(args):
             print(f"Overall IoU on true positives: {round(ious_global,3)}")
             print(
                 f"Proportion of true box covered by pred box on true positives: {round(intersections_global,3)}")
+            print ('-'*70)
 
             # Save the results in a folder with the name of the csv file
 
@@ -230,3 +240,4 @@ if __name__ == '__main__':
     gpu_id = os.getenv('CUDA_VISIBLE_DEVICES', '0')
     with tf.device('/GPU:' + gpu_id):
         _main_(_args)
+

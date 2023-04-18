@@ -3,7 +3,7 @@
 # and move the detected.csv files to a detections folder in the parent folder
 
 $parentFolder = '/home/basile/Documents/projet_bees_detection_basile/data_bees_detection/whole_dataset'
-$predictScript = '/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/predict.py'
+$predictScript = '/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/predict.py'
 $outputFolderName = 'csv_input'
 
 # Define the name of the detections folder

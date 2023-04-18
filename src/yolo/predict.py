@@ -22,14 +22,14 @@ argparser = argparse.ArgumentParser(
 argparser.add_argument(
   '-c',
   '--conf',
-  default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/config/bees_detection_resnet.json',
+  default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/config/bees_detection_resnet.json',
   type=str,
   help='path to configuration file')
 
 argparser.add_argument(
   '-w',
   '--weights',
-  default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/saved_weights/ResNet_bestLoss.h5',
+  default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/data/saved_weights/ResNet_bestLoss.h5',
   type=str,
   help='path to pretrained weights')
 
@@ -306,7 +306,7 @@ def _main_(args):
       images = list(list_images(image_path))
 
       if len(images) == 0:
-        raise Exception("No images found in {}, it may be due to the fact that images have no extension in their file name, if so, run /home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/inputs/put_extension.py".format(image_path))
+        raise Exception("No images found in {}, it may be due to the fact that images have no extension in their file name, if so, run /home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/data/inputs/put_extension.py".format(image_path))
       
       for fname in tqdm(images):
         # Open image

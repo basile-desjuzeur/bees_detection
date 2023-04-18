@@ -25,6 +25,15 @@ sqlite_path = '/home/basile/Documents/projet_bees_detection_basile/data_bees_det
 # path to the folder where the csv and the images will be saved
 output_folder = '/home/basile/Documents/projet_bees_detection_basile/data_bees_detection/inat_12_04'
 
+# path to the csv qith all the already downloaded images
+path_whole_dataset = '/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/crop/data/files_in_whole_dataset_with_real_labels/whole_dataset.csv'
+
+# get the names of the images already downloaded as an iterable
+df_whole_dataset = pd.read_csv(path_whole_dataset, sep=',')
+df_whole_dataset = df_whole_dataset['Paths']
+df_whole_dataset = df_whole_dataset.str.split('/').str[-1]
+
+
 ########## UTILS ##########
 
 
@@ -58,6 +67,36 @@ def info_from_taxon_id(taxon_id, c):
     return df
 
 
+def is_already_downloaded(df_taxon, df_dataset):   
+    """
+    Checks if the images of the taxon are already downloaded
+    :param csv_taxon: dataframe with the information of the taxon fetched from the sqlite database
+                    # taxon_id, photo_id, extension, observation_uuid
+
+    :param df_dataset: dataframe with all the names of the images already downloaded
+                    # name (e.g. Apis mellifera.jpg)
+
+    :return: a dataframe with the images that are not already downloaded
+    """
+
+    # Get the names of the images
+    df_taxon['name'] = df_taxon['photo_id'].astype(str) + '.' + df_taxon['extension']
+
+    # Check if the images are already downloaded
+    df_taxon['is_already_downloaded'] = df_taxon['name'].isin(df_dataset)
+
+    # Get only the images that are not already downloaded
+    df_taxon = df_taxon[df_taxon['is_already_downloaded'] == False]
+
+    # Drop the column is_already_downloaded
+    df_taxon = df_taxon.drop('is_already_downloaded', axis=1)
+
+    # Drop the column name 
+    df_taxon = df_taxon.drop('name', axis=1)
+
+    return df_taxon
+
+
 ########## MAIN ##########
 
 def main():
@@ -75,6 +114,8 @@ def main():
     path_to_img_files = os.path.join(output_folder, 'Pictures')
     if not os.path.exists(path_to_img_files):
         os.mkdir(path_to_img_files)
+
+
 
     errors = []
 
@@ -98,6 +139,9 @@ def main():
 
         # Get the info from the taxon id
         df_info_taxon = info_from_taxon_id(taxon_id, c)
+
+        # Check if the images are already downloaded
+        df_info_taxon = is_already_downloaded(df_info_taxon, df_whole_dataset)
 
         # Save the infos in a csv file
         df_info_taxon.to_csv(path_to_csv_files + '/' +

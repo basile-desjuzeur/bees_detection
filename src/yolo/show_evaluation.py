@@ -7,7 +7,7 @@ import pandas as pd
 from keras_yolov2.utils import draw_boxes, draw_true_boxes,BoundBox
 
 # Path to evaluation history (bad boxes)
-pickle_path = "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/pickles/histories/ResNet50_2023-04-06-17:45:47_0/test/bad_boxes_ResNet50_test.p"
+pickle_path = "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/data/pickles/histories/ResNet50_2023-04-18-11:30:42_0/test1/boxes_ResNet50_test1.p"
 
 # Open pickle
 with open(pickle_path, 'rb') as fp:
@@ -15,14 +15,14 @@ with open(pickle_path, 'rb') as fp:
 
 
 # Path to config filed use to evaluate
-config_path = "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/config/bees_detection_resnet.json"
+config_path = "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/config/bees_detection_resnet_copy.json"
 
 # Open config file as a dict
 with open(config_path) as config_buffer:
     config = json.load(config_buffer)
 
 # Path to whole dataset
-dataset_path = "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/inputs/bees_detection_dataset.csv"
+dataset_path = "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/data/inputs/bees_detection_dataset.csv"
 df_dataset=pd.read_csv(dataset_path,names=['filepath','xmin','ymin','xmax','ymax','label','width','height'])
 
 # Make sure the output path exists

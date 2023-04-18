@@ -223,7 +223,7 @@ argparser = argparse.ArgumentParser(
 argparser.add_argument(
     '-c',
     '--conf',
-    default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/config/bees_detection.json',
+    default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/config/bees_detection.json',
     help='path to configuration file')
 
 argparser.add_argument(

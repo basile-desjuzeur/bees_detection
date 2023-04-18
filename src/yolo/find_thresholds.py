@@ -14,8 +14,20 @@ from keras_yolov2.utils import (bbox_iou,
                                 results_metrics_per_classes)
 
 
+########### INPUTS ############
+
 #d'abord évaluer un fichier config
 #mettre ce fichier config en hardcode sur ce fichier, le lancer et obtenir le graphique
+
+# Path to evaluation history pickle file, starting with "boxes"
+pickle_path = "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/data/pickles/histories/ResNet50_2023-04-18-16:14:01_0/test/boxes_ResNet50_test.p"
+
+# Path to config file used to evaluate
+config_path = "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/config/bees_detection_resnet_cosine.json"
+
+
+
+######## FUNCTIONS ###########
 
 def load_k(k):
     """
@@ -37,16 +49,10 @@ def load_k(k):
     return np.array(annots)
 
 
-# Path to evaluation history pickle file, starting with "boxes"
-pickle_path = "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/pickles/histories/MobileNetV2-alpha=1.0_2023-03-23-17:21:53_0/temp_csv_all_species/boxes_MobileNetV2-alpha=1.0_temp_csv_all_species.p"
-
-
 # Open pickle
 with open(pickle_path, 'rb') as fp:
     img_boxes = pickle.load(fp)
 
-# Path to config file used to evaluate
-config_path = "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/config/bees_detection_resnet.json"
 
 # Open config file as a dict
 with open(config_path) as config_buffer:
@@ -193,7 +199,7 @@ prf1 = np.array(prf1)
 
 # save the plots in a folder
 now=datetime.now()
-output_path='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/outputs/plots_find_thresholds_on_{}'.format(now.strftime("%d-%m-%Y_%H:%M"))
+output_path='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/data/outputs/plots_find_thresholds_on_{}'.format(now.strftime("%d-%m-%Y_%H:%M"))
 os.makedirs(output_path)
 
 # Plot figures

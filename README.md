@@ -26,7 +26,13 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About the project
-Developed for the ECONNECT project (CNRS-LEFE), BeesDetection ensures the automatic detection of bees by Deep Learning. Here we developed an algorithm based on MobileNet and YOLO for Raspberry PI.
+Developed for the ECONNECT project (CNRS-LEFE), BeesDetection ensures the automatic detection of bees by Deep Learning. Here we developed an algorithm based on MobileNet and YOLO.
+
+The process is divided in 3 phases : 
+
+* Detection with Yolo algorithm, outputs a bbox which is passed through a segment-anything
+* Crop of this image according to the bbox coordonates 
+* Classification of the cropped image among * * taxons
 
 
 <!-- GETTING STARTED -->
@@ -55,12 +61,12 @@ source venv_bees/bin/activate
 We recommend you to get the data folder and project folder (with the virtual environment) near by.
 
 <div style="text-align: center;">
-  <img src="src/data/imgs/img_for_readme/tree0.png" alt="tree">
+  <img src="src/yolo/data/imgs/img_for_readme/tree0.png" alt="tree">
 </div>
 
 <!-- HOW IT WORK -->
 # How it works
-## Code source folder (project_ornithoscore/src)
+## Code source folder (project_bees_detection/src/yolo) 
 In src folder you will find: 
 * [train.py](#trainpy) (for training)
 * [evaluate.py](#evaluatepy) (for evaluation)
@@ -69,7 +75,7 @@ In src folder you will find:
 ### evaluate.py
 ### predict.py
 
-## YOLOV2 folder (project_ornithoscore/src/keras_yolov2)
+## YOLOV2 folder (project_bees_detection/src/yolo/keras_yolov2)
 In this YOLO folder you will find: 
 * [backend.py](#backendpy) (to create backend of models)
 * [frontend.py](#frontendpy) (to create frontend of models)
@@ -86,12 +92,25 @@ In this YOLO folder you will find:
 <!-- HOW TO USE IT -->
 # How to use it
 ```
-python3 train.py -c path_custom_config.json
-python3 evaluate.py -c path_custom_config.json
-python3 predict.py -c path_custom_config.json -w path_seleccted_weights.h5 -i path_image_folder_to_predict
+Create a config file, following templates in src/yolo/config
+
+python3 gen_anchors.py -c path_custom_config.json
+
+Report the output of gen_anchors in the config file
+
+python3 src/yolo/train.py -c path_custom_config.json
+python3 src/yolo/evaluate.py -c path_custom_config.json
+python3 src/yolo/predict.py -c path_custom_config.json -w path_seleccted_weights.h5 -i path_image_folder_to_predict -o 'csv_input'
+
+This generates a csv with the predictions from the Yolo model, pass it through segment-anything
+
+
+
 ```
 
 <!-- CONTACT -->
 # Contact
 Basile Desjuzeur
-Rondier acarlier (https://www.linkedin.com/in/acarlier-rondier/)
+Lucien Rondier 
+Axel Carlier
+

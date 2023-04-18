@@ -25,7 +25,7 @@ argparser.add_argument(
     '-c',
     '--conf', 
     help='Path to configuration file',
-    default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/config/bees_detection_copy.json'
+    default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/config/bees_detection_copy.json'
 )
 
 argparser.add_argument(
@@ -91,7 +91,7 @@ def _main_eval_diff_(args):
     #2) create a temp folder
 
         
-    os.makedirs('/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/temp_'+start_time.strftime("%Y%m%d-%H%M%S"))
+    os.makedirs('/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/data/temp_'+start_time.strftime("%Y%m%d-%H%M%S"))
 
     #3) stores in this folder one csv per label + all the species together
 
@@ -101,12 +101,12 @@ def _main_eval_diff_(args):
 
         temp_df=df_evaluate.loc[df_evaluate[0].str.split(os.path.sep,expand=True).iloc[:,-2]==label]
         label=label.replace(' ','_')
-        path_to_csv='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/temp_'+start_time.strftime("%Y%m%d-%H%M%S")+'/temp_csv_{}.csv'.format(label)
+        path_to_csv='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/data/temp_'+start_time.strftime("%Y%m%d-%H%M%S")+'/temp_csv_{}.csv'.format(label)
         temp_df.to_csv(path_to_csv,index=False,header=False)
         evaluate_paths.append(path_to_csv)
 
     # create a csv with all the pictures coming from the dataset
-    path_to_csv='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/temp_'+start_time.strftime("%Y%m%d-%H%M%S")+'/temp_csv_all_species.csv'
+    path_to_csv='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/data/temp_'+start_time.strftime("%Y%m%d-%H%M%S")+'/temp_csv_all_species.csv'
     df_evaluate.to_csv(path_to_csv,index=False,header=False)
     evaluate_paths.append(path_to_csv)
 
@@ -183,7 +183,7 @@ def _main_eval_diff_(args):
     
     #6) delete the temp folder
 
-    shutil.rmtree('/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/temp_'+start_time.strftime("%Y%m%d-%H%M%S"))
+    shutil.rmtree('/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/data/temp_'+start_time.strftime("%Y%m%d-%H%M%S"))
 
     #7) save the dataframe to a csv 
 

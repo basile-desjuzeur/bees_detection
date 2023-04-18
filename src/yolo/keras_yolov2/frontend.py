@@ -123,8 +123,8 @@ class YOLO(object):
               policy,
               optimizer_config,
               mosaic='none',
-              saved_pickles_path='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/pickles',
-              saved_weights_name='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/saved_weights/best_model_bestLoss.h5',
+              saved_pickles_path='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/data/pickles',
+              saved_weights_name='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/data/saved_weights/best_model_bestLoss.h5',
               workers=3,
               max_queue_size=8,
               early_stop=True,
@@ -225,7 +225,7 @@ class YOLO(object):
                                     verbose=1,
                                     period=10)
         
-        # ckp_best_loss = ModelCheckpoint("/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/saved_weights/benchmark_weights/model",
+        # ckp_best_loss = ModelCheckpoint("/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/data/saved_weights/benchmark_weights/model",
         #                                 monitor='val_loss',
         #                                 verbose=1,
         #                                 save_best_only=True,
@@ -261,7 +261,7 @@ class YOLO(object):
 
         # Save history as pickle
         saved_weights_file_name=root.split(os.sep)[-1]
-        if self._saved_pickles_path != '':
+        if self._saved_pickles_path != '' or self._saved_pickles_path is not None:
             pickle_file_path = f'{self._saved_pickles_path}history/{saved_weights_file_name}_bestLoss{ext}.p'
             pickel_dir_path ='/'.join(pickle_file_path.split('/')[:-1])
             if not os.path.exists(pickel_dir_path):

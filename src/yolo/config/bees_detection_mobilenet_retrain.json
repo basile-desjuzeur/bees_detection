@@ -25,11 +25,11 @@
 
     "train": {  
         "train_times":          1,
-        "pretrained_weights":   "",
+        "pretrained_weights":   "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/data/saved_weights/MobileNet_04_03.h5",
         "freeze":               false,
         "finetune":             false,
         "batch_size":           16,
-        "learning_rate":        1e-3,
+        "learning_rate":        1e-5,
         "nb_epochs":            80,
 
         "workers":              12,
@@ -63,7 +63,7 @@
         "sampling":             true,
         "mosaic":               "none",
 
-        "saved_weights_name":   "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/data/saved_weights/MobileNet.h5"
+        "saved_weights_name":   "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/data/saved_weights/MobileNet_retrain.h5"
         
     },
 

@@ -12,7 +12,7 @@ argparser = argparse.ArgumentParser()
 argparser.add_argument(
     '-c',
     '--conf',
-    default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/config/bees_detection.json',
+    default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/config/bees_detection.json',
     help='path to configuration file')
 
 argparser.add_argument(
@@ -96,7 +96,8 @@ def run_kmeans(ann_dims, anchor_num):
             return centroids
 
         # calculate new centroids
-        centroid_sums = np.zeros((anchor_num, anchor_dim), np.float)
+        centroid_sums = np.zeros((anchor_num, anchor_dim))
+
         for i in range(ann_num):
             centroid_sums[assignments[i]] += ann_dims[i]
         for j in range(anchor_num):
