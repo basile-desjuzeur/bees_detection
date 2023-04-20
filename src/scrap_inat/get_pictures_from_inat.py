@@ -2,9 +2,9 @@ import pandas as pd
 import sqlite3
 import os
 import shutil
+import asyncio
 
-from download_from_inat import download_from_csv
-
+from download_from_inat import download_from_csv_not_asynchrone
 
 ########## INPUTS ##########
 
@@ -12,7 +12,7 @@ from download_from_inat import download_from_csv
 # stored in the df_taxa_in_bdd variable
 
 # path to the csv file with all the taxon name
-csv_path = '/home/basile/Documents/projet_bees_detection_basile/classification/data/hierarchy.csv'
+csv_path = '/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/classification/data/hierarchy.csv'   
 # Load the csv file with all the taxon name
 df_taxa_in_bdd = pd.read_csv(csv_path, sep=',')
 #  Get the taxon names as an iterable
@@ -105,15 +105,19 @@ def main():
     conn = sqlite3.connect(sqlite_path)
     c = conn.cursor()
 
-    # Creates an output folder to save the csv files
+    # Output folders
     path_to_csv_files = os.path.join(output_folder, 'csv_files')
-    if not os.path.exists(path_to_csv_files):
-        os.mkdir(path_to_csv_files)
-
-    # Creates an output folder to save the images
     path_to_img_files = os.path.join(output_folder, 'Pictures')
-    if not os.path.exists(path_to_img_files):
-        os.mkdir(path_to_img_files)
+    
+    # Deletes csv and images files if they already exist
+    if os.path.exists(path_to_csv_files):
+        shutil.rmtree(path_to_csv_files)
+    if os.path.exists(path_to_img_files):
+        shutil.rmtree(path_to_img_files)
+
+    # Creates output folders
+    os.mkdir(path_to_csv_files)
+    os.mkdir(path_to_img_files)
 
 
 
@@ -143,14 +147,19 @@ def main():
         # Check if the images are already downloaded
         df_info_taxon = is_already_downloaded(df_info_taxon, df_whole_dataset)
 
+        # Check if there are new images
+        if df_info_taxon.empty:
+            smiley_error = u'\u274C'
+            print('No new images for the taxon: ' +
+                  taxon_name + '  ' + smiley_error + '\n')
+            continue
+
         # Save the infos in a csv file
-        df_info_taxon.to_csv(path_to_csv_files + '/' +
-                             taxon_name + '.csv', index=False)
+        df_info_taxon.to_csv(os.path.join(path_to_csv_files,taxon_name+'.csv'), index=False)
 
-        # Download the images
-        download_from_csv(path_to_csv_files + '/' + taxon_name +
-                          '.csv', taxon_name, images_folder=path_to_img_files)
-
+        # Download the images and wait until the download is finished
+        download_from_csv_not_asynchrone(os.path.join(path_to_csv_files,taxon_name+'.csv'), taxon_name, images_folder=path_to_img_files)
+        
         smiley_done = u'\u2705'
         print('Done for the taxon: ' + taxon_name + '  ' + smiley_done + '\n')
 
