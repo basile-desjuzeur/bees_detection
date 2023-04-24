@@ -20,7 +20,7 @@ argparser = argparse.ArgumentParser(
 argparser.add_argument(
     '-c',
     '--conf',
-    default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/config/bees_detection_mobilenet_retrain.json',
+    default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/config/bees_detection_mobilenet_retrain_find_lrjson',
     help='path to configuration file')
 
 
@@ -83,7 +83,7 @@ def _main_(args):
 
     config['train']['optimizer']['lr_scheduler']['name'] = 'None'
 
-    lr_finder_callback = LRFinder(start_lr=1e-9, end_lr=1e-6, max_steps=150, smoothing=0.9)
+    lr_finder_callback = LRFinder(start_lr=1e-3, end_lr=1, max_steps=150, smoothing=0.9)
 
     yolo.train(train_imgs=train_imgs,
                valid_imgs=valid_imgs,

@@ -171,7 +171,7 @@ class YOLO(object):
         #train_imgs: the list of img to train the model, donc format jpg
         #BatchGenerator: défini dans preprocessing
 
-        #Sauf indication contraire dans le fichier de config on fait du sampling sur les images de train
+        #Sauf indication contraire dans le fichier de on fait du sampling sur les images de train
         train_generator = BatchGenerator(train_imgs,
                                          generator_config,
                                          norm=self._feature_extractor.normalize,

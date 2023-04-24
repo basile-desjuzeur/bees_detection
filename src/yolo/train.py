@@ -3,14 +3,12 @@
 import argparse
 import json
 import os
-
 import numpy as np
 import tensorflow as tf
 
 from keras_yolov2.frontend import YOLO
 from keras_yolov2.preprocessing import parse_annotation_xml, parse_annotation_csv
 from keras_yolov2.utils import enable_memory_growth
-
 from history import _plot_history_
 
 argparser = argparse.ArgumentParser(
@@ -19,7 +17,7 @@ argparser = argparse.ArgumentParser(
 argparser.add_argument(
     '-c',
     '--conf',
-    default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/config/bees_detection_mobilenet_retrain.json',
+    default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/config/bees_detection_mobilenet_retrain_find_lr_lr_scheduler_no_sampling.json',
     help='path to configuration file')
 
 

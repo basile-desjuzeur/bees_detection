@@ -20,13 +20,13 @@ argparser = argparse.ArgumentParser(
 argparser.add_argument(
     '-c',
     '--conf',
-    default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/config/bees_detection_mobilenet_retrain.json',
+    default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/config/bees_detection_mobilenet_retrain_find_lr_lr_scheduler_no_sampling.json',
     help='path to configuration file')
 
 argparser.add_argument(
     '-w',
     '--weights',
-    default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/data/saved_weights/MobileNet_retrain_bestLoss.h5',
+    default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/data/saved_weights/MobileNet_retrain_lr_1e1_COS_no_sampling_bestLoss.h5',
     help='path to pretrained weights')
 
 argparser.add_argument(

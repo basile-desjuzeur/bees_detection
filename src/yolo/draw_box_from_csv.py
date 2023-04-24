@@ -3,13 +3,13 @@ import cv2
 import pandas as pd
 
 
-path_to_csv = '/home/basile/Documents/projet_bees_detection_basile/bees_detection/crop/data/predict_csv/detected_images_2023-04-07_10-48.csv'
-path_to_output_base='/home/basile/Documents/projet_bees_detection_basile/bees_detection/crop/data/images_with_bbox'
+path_to_csv = '/home/basile/Documents/projet_bees_detection_basile/test2/output_copy.csv'
+path_to_output_base='/home/basile/Documents/projet_bees_detection_basile/test2/mask_generator_output_copy/'
 
 # Get the folder name
 folder_name = path_to_csv.split(os.path.sep)[-1]
 folder_name = folder_name.split('.')[0]
-pathe_to_output = os.path.join(path_to_output_base,folder_name)
+path_to_output = os.path.join(path_to_output_base,folder_name)
 
 def convert_bbox_to_absolute(xmin,ymin,xmax,ymax,width,height):
 
@@ -54,6 +54,9 @@ def draw_bbox_from_csv(path_to_csv,path_to_output):
     # Load the csv file
     df_dataset = pd.read_csv(path_to_csv,names = ['filepath','xmin','ymin','xmax','ymax','label','width','height'])
 
+    i = 0
+
+
     # Draw the bounding boxes
     for index, row in df_dataset.iterrows():
 
@@ -66,18 +69,18 @@ def draw_bbox_from_csv(path_to_csv,path_to_output):
                                                        df_dataset['xmax'][index],df_dataset['ymax'][index],
                                                        df_dataset['width'][index],df_dataset['height'][index])
 
-        
+
         # Draw the box
         line_width_factor = int(min(width, height) * 0.005)
         cv2.rectangle(frame, (xmin, ymin), (xmax, ymax),(0,255,0) , line_width_factor * 2)
 
         # Save image
-        img_name = os.path.basename(img_path)
-        cv2.imwrite(os.path.join(path_to_output,img_name),frame)
-
+        img_name = img_path.split(os.path.sep)[-1]
+        cv2.imwrite(os.path.join(path_to_output,str(i)+img_name),frame)
+        i += 1
 
 if __name__ == '__main__':
 
-    draw_bbox_from_csv(path_to_csv,pathe_to_output)
+    draw_bbox_from_csv(path_to_csv,path_to_output)
 
 

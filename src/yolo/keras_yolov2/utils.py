@@ -410,7 +410,7 @@ def import_feature_extractor(backend, input_size, freeze=False, finetune=False):
 
 # these funcition are from imutils, you can check this library here: https://github.com/jrosebr1/imutils
 # just added this function to have less dependencies
-def list_images(base_path, valid_exts=(".jpg", ".jpeg",'.JPEG' ".png", ".bmp", ".tif", ".tiff"), contains=None):
+def list_images(base_path, valid_exts=(".jpg", ".jpeg",'.JPEG',".JPG", ".png", ".bmp", ".tif", ".tiff"), contains=None):
     # return the set of files that are valid
     return list_files(base_path, valid_exts, contains=contains)
 

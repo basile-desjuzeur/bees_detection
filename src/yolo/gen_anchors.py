@@ -12,13 +12,13 @@ argparser = argparse.ArgumentParser()
 argparser.add_argument(
     '-c',
     '--conf',
-    default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/config/bees_detection.json',
+    default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/config/test.json',
     help='path to configuration file')
 
 argparser.add_argument(
     '-a',
     '--anchors',
-    default=5,
+    default=1,
     help='number of anchors to use',
     type=int)
 
@@ -124,6 +124,10 @@ def main(args):
     feature_extractor = import_feature_extractor(config['model']['backend'], input_size)
     grid_w = config['model']['input_size_w']/feature_extractor.get_output_shape()[1]
     grid_h = config['model']['input_size_h']/feature_extractor.get_output_shape()[0]
+
+    print('feature extractor output shape:', feature_extractor.get_output_shape())
+    print('grid size: {} x {}'.format(grid_w, grid_h))
+
 
     # run k_mean to find the anchors
     annotation_dims = []

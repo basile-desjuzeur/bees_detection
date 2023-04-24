@@ -2,6 +2,7 @@ import copy
 from multiprocessing.connection import wait
 import os
 import xml.etree.ElementTree as et
+from PIL import Image
 
 import cv2
 from cv2 import resize
@@ -480,6 +481,14 @@ class BatchGenerator(Sequence):
             # print(type(x_batch[instance_count]))
             # exit()
 
+            # for i in range(15):
+            #     pil_image=Image.fromarray((x_batch[i]*1).astype(np.uint8)).convert('RGB')
+            #     # pil_image.show()
+            #     print(x_batch[i].shape)
+            #     print(type(x_batch[i]))
+            #     print(x_batch[i])
+
+            # exit()
 
 
         return x_batch, y_batch
@@ -533,6 +542,7 @@ class BatchGenerator(Sequence):
         # Loop to complete each species from the rarest
         counter_min_key = min(counter, key=counter.get)
         counter_min = counter[counter_min_key]
+            
         while counter_min < cap:
             # Take the first picture and replace it in the queue
             header_image = image_per_specie[counter_min_key].pop(0)
