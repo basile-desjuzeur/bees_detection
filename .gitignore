@@ -8,3 +8,4 @@ src/datafiles/*
 Metriques.docx
 requirements.txt
 src/segment-anything/segment_anything/*
+/home/basile/Documents/projet_bees_detection_basile/segment-anything/*
