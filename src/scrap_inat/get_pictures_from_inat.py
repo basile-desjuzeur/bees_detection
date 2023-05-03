@@ -4,7 +4,7 @@ import os
 import shutil
 import asyncio
 
-from download_from_inat import download_from_csv_not_asynchrone
+from download_from_inat import download_from_csv_not_asynchrone,download_from_csv
 
 ########## INPUTS ##########
 
@@ -12,21 +12,22 @@ from download_from_inat import download_from_csv_not_asynchrone
 # stored in the df_taxa_in_bdd variable
 
 # path to the csv file with all the taxon name
-csv_path = '/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/classification/data/hierarchy.csv'   
+csv_path = '/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/classification/hierarchy.csv'   
 # Load the csv file with all the taxon name
 df_taxa_in_bdd = pd.read_csv(csv_path, sep=',')
 #  Get the taxon names as an iterable
 df_taxa_in_bdd = df_taxa_in_bdd['species']
 
 
+
 # path to the sqlite database
 sqlite_path = '/home/basile/Documents/projet_bees_detection_basile/data_bees_detection/inat_12_04/inat.db'
 
 # path to the folder where the csv and the images will be saved
-output_folder = '/home/basile/Documents/projet_bees_detection_basile/data_bees_detection/inat_12_04'
+output_folder = '/home/basile/Documents/projet_bees_detection_basile/data_bees_detection/inat_25_04'
 
 # path to the csv qith all the already downloaded images
-path_whole_dataset = '/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/crop/data/files_in_whole_dataset_with_real_labels/whole_dataset.csv'
+path_whole_dataset = '/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/crop/25_04/files_in_whole_dataset_with_real_labels/whole_dataset.csv'
 
 # get the names of the images already downloaded as an iterable
 df_whole_dataset = pd.read_csv(path_whole_dataset, sep=',')
@@ -63,6 +64,10 @@ def info_from_taxon_id(taxon_id, c):
     # Create a dataframe with the result
     df = pd.DataFrame(
         result, columns=['taxon_id', 'photo_id', 'extension', 'observation_uuid'])
+    
+    # Drop the duplicates
+    df = df.drop_duplicates()
+
 
     return df
 
@@ -70,7 +75,7 @@ def info_from_taxon_id(taxon_id, c):
 def is_already_downloaded(df_taxon, df_dataset):   
     """
     Checks if the images of the taxon are already downloaded
-    :param csv_taxon: dataframe with the information of the taxon fetched from the sqlite database
+    :param df_taxon: dataframe with the information of the taxon fetched from the sqlite database
                     # taxon_id, photo_id, extension, observation_uuid
 
     :param df_dataset: dataframe with all the names of the images already downloaded
@@ -158,8 +163,10 @@ def main():
         df_info_taxon.to_csv(os.path.join(path_to_csv_files,taxon_name+'.csv'), index=False)
 
         # Download the images and wait until the download is finished
-        download_from_csv_not_asynchrone(os.path.join(path_to_csv_files,taxon_name+'.csv'), taxon_name, images_folder=path_to_img_files)
-        
+        # download_from_csv_not_asynchrone(os.path.join(path_to_csv_files,taxon_name+'.csv'), taxon_name, images_folder=path_to_img_files)
+        download_from_csv(os.path.join(path_to_csv_files,taxon_name+'.csv'), taxon_name, images_folder=path_to_img_files)
+    
+
         smiley_done = u'\u2705'
         print('Done for the taxon: ' + taxon_name + '  ' + smiley_done + '\n')
 
@@ -170,9 +177,11 @@ def main():
     # Close the connection
     conn.close()
 
-    # Remove the csv files
-    shutil.rmtree(path_to_csv_files)
+    # # Remove the csv files
+    # shutil.rmtree(path_to_csv_files)
 
 
 if __name__ == "__main__":
     main()
+
+    

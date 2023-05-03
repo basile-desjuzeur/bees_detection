@@ -27,7 +27,7 @@ parser.add_argument(
     type=str,
     required=True,
     help="Path to either a single input image or folder of images.",
-    default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/segment-anything/data/input'
+    default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/segment-anything/input'
 )
 
 parser.add_argument(
@@ -38,7 +38,7 @@ parser.add_argument(
         "Path to the directory where masks will be output. Output will be either a folder "
         "of PNGs per image or a single json with COCO-style masks."
     ),
-    default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/segment-anything/data/output_amg'
+    default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafile/segment-anything/output_amg'
 )
 
 parser.add_argument(

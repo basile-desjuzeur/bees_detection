@@ -5,9 +5,9 @@ from PIL import Image
 from tqdm import tqdm
 
 
-source_path = '/home/basile/Documents/projet_bees_detection_basile/data_bees_detection/test_2'
-target_path ='/home/basile/Documents/projet_bees_detection_basile/data_bees_detection/test_cropped'
-csv_path = '/home/basile/Documents/projet_bees_detection_basile/data_bees_detection/test_2q/Detections/test_2_merged.csv'
+source_path = '/home/basile/Documents/projet_bees_detection_basile/data_bees_detection/whole_dataset'
+target_path = '/home/basile/Documents/projet_bees_detection_basile/data_bees_detection/whole_dataset_cropped'
+csv_path = os.path.join('/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/crop/predict_csv/other', 'whole_datast_predicted_latest.csv')
 
 def crop_image(img_path, x, y, w, h):
     '''

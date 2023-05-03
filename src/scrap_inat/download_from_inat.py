@@ -90,3 +90,7 @@ def download_from_csv_not_asynchrone(path_to_csv, taxon_name, images_folder):
                 target_dest = os.path.join(
                     images_folder, taxon_name, image_name)
                 get_image_not_asynchrone(image_url, target_dest)
+
+# get_image(image_url="https://inaturalist-open-data.s3.amazonaws.com/photos/216585135/medium.jpeg",target_dest='./test.jpg')
+# print('ok')
+# get_image_not_asynchrone(image_url="https://inaturalist-open-data.s3.amazonaws.com/photos/216585135/medium.jpeg",target_dest='./test.jpg')

@@ -18,7 +18,7 @@ import datetime
 #on récupère les espèces du csv  
 
 def obtain_list_especes_reelles(videos_path):
-    with open("/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/data/all_videos_annotated.csv", 'r') as f:
+    with open("/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/yolo/all_videos_annotated.csv", 'r') as f:
         reader = csv.reader(f)
         list_videos = list(reader)
     list_especes_reelles = []
@@ -197,7 +197,7 @@ def predict_videos(videos_path, config_path, weights_path, list_especes_reelles)
     video_time = str(datetime.timedelta(seconds=seconds))
         
 
-    with open("/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/data/count_frame.csv", "a", newline='') as f:
+    with open("/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/yolo/count_frame.csv", "a", newline='') as f:
         writer = csv.writer(f)
         L = [videos_path]
         for index in res2:  
@@ -266,7 +266,7 @@ def compute_F1_score_for_videos(list_especes_predites, list_especes_reelles):
 #on veut générer une liste de vidéos à tester pour ensuite lancer evaluate_on_videos sur chacune d'entre elles et obtenir tous les F1 score, rappel, précision
 
 def generate_list_videos_to_test(): #à changer lorsque l'on obtiendra de nouvelles vidéos
-    with open("/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/data/all_videos.csv", 'r') as f:
+    with open("/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/yolo/all_videos.csv", 'r') as f:
         reader = csv.reader(f)
         list_videos = list(reader)
         #on transforme la liste de snoms de vidéos en liste de chemins vers les vidéos, en prenant en compte les sous-dossiers selon les tasks
@@ -355,13 +355,13 @@ def print_results_metrics_per_classes(class_res):
 #fonction pour détecter les images mal annotées
 
 def detect_bad_annotated_images_and_save_path(list_especes_predites, list_especes_reelles, videos_path):
-    with open('/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/data/comparate_results_videos/results_prediction.csv', 'a') as f:
+    with open('/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/yolo/comparate_results_videos/results_prediction.csv', 'a') as f:
         writer = csv.writer(f)
         writer.writerow([videos_path, list_especes_predites, list_especes_reelles])
         print(f' register video {videos_path} done')
     #si on ne retrouve pas les même espèces dans les deux liste alors on enregistre le nom de la vidéo dans un fichier csv
     if set(list_especes_predites) != set(list_especes_reelles):
-        with open('/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/data/videos_with_diff_species_max20.csv', 'a') as f:
+        with open('/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/yolo/videos_with_diff_species_max20.csv', 'a') as f:
             writer = csv.writer(f)
             writer.writerow([videos_path, list_especes_predites, list_especes_reelles])
             

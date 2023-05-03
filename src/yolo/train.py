@@ -126,3 +126,11 @@ if __name__ == '__main__':
     gpu_id = os.getenv('CUDA_VISIBLE_DEVICES', '0')
     with tf.device('/GPU:' + gpu_id):
         _main_(_args)
+
+import tensorflow as tf
+from tensorflow import keras
+from keras import layers
+import argparse
+
+
+argparser = argparse.ArgumentParser('Train a ')

@@ -33,7 +33,7 @@ argparser.add_argument(
 argparser.add_argument(
   '-w',
   '--weights',
-  #default="/home/basile/Documents/projet_bees_detection/bees_detection/src/yolo/data/saved_weights/best_model_bestLoss.h5",
+  #default="/home/basile/Documents/projet_bees_detection/bees_detection/src/datafiles/yolo/saved_weights/best_model_bestLoss.h5",
   type=str,
   help='path to pretrained weights')
 

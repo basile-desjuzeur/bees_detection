@@ -61,7 +61,7 @@ def _plot_history_(args):
     plt.title('Training from {}'.format(pickle_path.split(os.sep)[-1]))
     
     # Save figure
-    plot_path=os.path.join('/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/data/outputs/train/{}.jpg'.format(pickle_path.split(os.sep)[-1].split('.')[0]))
+    plot_path=os.path.join('/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/yolo/outputs/train/{}.jpg'.format(pickle_path.split(os.sep)[-1].split('.')[0]))
     plt.savefig(plot_path)
 
     # Displays figure

@@ -123,8 +123,8 @@ class YOLO(object):
               policy,
               optimizer_config,
               mosaic='none',
-              saved_pickles_path='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/data/pickles',
-              saved_weights_name='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/data/saved_weights/best_model_bestLoss.h5',
+              saved_pickles_path='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/yolo/pickles',
+              saved_weights_name='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/yolo/saved_weights/best_model_bestLoss.h5',
               workers=3,
               max_queue_size=8,
               early_stop=True,
@@ -225,7 +225,7 @@ class YOLO(object):
                                     verbose=1,
                                     period=10)
         
-        # ckp_best_loss = ModelCheckpoint("/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/data/saved_weights/benchmark_weights/model",
+        # ckp_best_loss = ModelCheckpoint("/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/yolo/saved_weights/benchmark_weights/model",
         #                                 monitor='val_loss',
         #                                 verbose=1,
         #                                 save_best_only=True,

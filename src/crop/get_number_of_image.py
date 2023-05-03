@@ -16,16 +16,17 @@ We dont take BD_71 as it is composed of pictures from all the other datasets
 """
 
 
-path_to_dataset = "/home/basile/Documents/projet_bees_detection_basile/data_bees_detection/whole_dataset"
+path_to_dataset = "/home/basile/Documents/projet_bees_detection_basile/data_bees_detection/whole_dataset_cropped"
 dir_anthophila = 'Anthophila'
+dir_new_justine = 'New_Justine'
 dir_DG = 'DG'
-dir_other = [ 'Anthophila', 'DG']
-dir_hierarchical = [ 'HS', 'LMDI']
+dir_other = [dir_anthophila, dir_new_justine, dir_DG]
+dir_hierarchical = [ 'HS', 'LMDI','inat_25_04']
 dir_flat = ['iNaturalist', 'Spipoll']
 dirs = dir_other + dir_hierarchical + dir_flat
-path_csv = '/home/basile/Documents/projet_bees_detection_basile/bees_detection/crop/data/files_in_whole_dataset_with_real_labels'
-path_whole_dataset_csv = '/home/basile/Documents/projet_bees_detection_basile/bees_detection/crop/data/files_in_whole_dataset_with_real_labels/whole_dataset.csv'
-output_path = '/home/basile/Documents/projet_bees_detection_basile/bees_detection/crop/data/files_in_whole_dataset_with_real_labels/number_of_images_per_specie_per_dataset.csv'
+path_csv = '/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/final_datafiles/dataset_yolo_cropped_with_real_labels'
+path_whole_dataset_csv = '/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/final_datafiles/dataset_yolo_cropped_with_real_labels/whole_dataset.csv'
+output_path = '/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/final_datafiles/dataset_yolo_cropped_with_real_labels/number_of_images_per_specie_per_dataset.csv'
 
 
 def clean_Anthophila_folder(path_to_dataset):
@@ -231,7 +232,21 @@ if __name__ == '__main__':
 
     df = get_number_of_image_Anthophila(path)
 
+    # removes the " in the path
+    df['Paths'] = df['Paths'].apply(lambda x : x.replace('"', ''))
+
     df.to_csv( os.path.join(path_csv,dir_anthophila+'.csv'), index=False)
+
+    ##### NEW JUSTINE #####
+
+    path = os.path.join(path_to_dataset, dir_new_justine)
+
+
+    df = get_number_of_image_Anthophila(path)
+
+    df.to_csv( os.path.join(path_csv,dir_new_justine+'.csv'), index=False)
+
+
 
     #####  Hierarchical folder #####
 

@@ -27,10 +27,10 @@ Output:
 path_taxref = '/home/basile/Documents/projet_bees_detection_basile/data_bees_detection/TAXREF/TAXREF16.0_ALL__11_04_2023.csv'
 
 # Path to the csv file with all the species 
-path_whole_dataset_csv = '/home/basile/Documents/projet_bees_detection_basile/bees_detection/crop/data/files_in_whole_dataset_with_real_labels/number_of_images_per_specie_per_dataset.csv'
+path_whole_dataset_csv = '/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/crop/25_04/files_in_whole_dataset_with_real_labels/number_of_images_per_specie_per_dataset.csv'
 
 # Path to output the csv files
-path_output_csv = '/home/basile/Documents/projet_bees_detection_basile/classification/data/'
+path_output_csv = '/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/classification/'
 
 
 ###### OUTPUTS ######

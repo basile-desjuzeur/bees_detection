@@ -26,7 +26,7 @@ argparser.add_argument(
 argparser.add_argument(
     '-w',
     '--weights',
-    default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/data/saved_weights/MobileNet_retrain_lr_1e1_COS_no_sampling_bestLoss.h5',
+    default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/yolo/saved_weights/MobileNet_retrain_lr_1e1_COS_no_sampling_bestLoss.h5',
     help='path to pretrained weights')
 
 argparser.add_argument(

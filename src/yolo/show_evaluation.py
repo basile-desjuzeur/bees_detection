@@ -11,7 +11,7 @@ from keras_yolov2.utils import draw_boxes, draw_true_boxes,BoundBox
 ##### Parameters #####
 
 # Path to evaluation history (either boxes or bad_boxes)
-pickle_path = "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/data/pickles/histories/MobileNetV2-alpha=1.0_2023-04-21-09:33:55_0/random_50_files_in_test/boxes_MobileNetV2-alpha=1.0_random_50_files_in_test.p"
+pickle_path = "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/yolo/pickles/histories/MobileNetV2-alpha=1.0_2023-04-21-09:33:55_0/random_50_files_in_test/boxes_MobileNetV2-alpha=1.0_random_50_files_in_test.p"
 
 # Path to config filed use to evaluate
 config_path = "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/config/bees_detection_mobilenet_retrain_find_lr_lr_scheduler.json"

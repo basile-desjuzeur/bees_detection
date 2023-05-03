@@ -14,13 +14,13 @@
 
     "data" : {
         "base_path":            "/home/basile/Documents/projet_bees_detection_basile/data_bees_detection/",
-        "dataset_csv_file":     "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/data/inputs/bees_detection_dataset.csv",
-        "train_csv_file":       "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/data/inputs/train.csv",
-        "valid_csv_file":       "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/data/inputs/valid.csv",
-        "test_csv_file":        ["/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/data/inputs/test.csv"], 
-        "saved_weight_path":    "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/data/saved_weights/",
-        "saved_pickles_path":   "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/data/pickles/histories/",
-        "evaluations_path":     "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/data/evaluations/"
+        "dataset_csv_file":     "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/yolo/inputs/bees_detection_dataset.csv",
+        "train_csv_file":       "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/yolo/inputs/train.csv",
+        "valid_csv_file":       "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/yolo/inputs/valid.csv",
+        "test_csv_file":        ["/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/yolo/inputs/test.csv"], 
+        "saved_weight_path":    "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/yolo/saved_weights/",
+        "saved_pickles_path":   "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/yolo/pickles/histories/",
+        "evaluations_path":     "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/yolo/evaluations/"
     },
 
     "train": {  
@@ -63,7 +63,7 @@
         "sampling":             true,
         "mosaic":               "none",
 
-        "saved_weights_name":   "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/data/saved_weights/ResNet.h5"
+        "saved_weights_name":   "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/yolo/saved_weights/ResNet.h5"
         
     },
 

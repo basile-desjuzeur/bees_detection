@@ -61,7 +61,7 @@ source venv_bees/bin/activate
 We recommend you to get the data folder and project folder (with the virtual environment) near by.
 
 <div style="text-align: center;">
-  <img src="src/yolo/data/imgs/img_for_readme/tree0.png" alt="tree">
+  <img src="src/datafiles/yolo/imgs/img_for_readme/tree0.png" alt="tree">
 </div>
 
 <!-- HOW IT WORK -->
