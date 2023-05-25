@@ -27,10 +27,10 @@ Output:
 path_taxref = '/home/basile/Documents/projet_bees_detection_basile/data_bees_detection/TAXREF/TAXREF16.0_ALL__11_04_2023.csv'
 
 # Path to the csv file with all the species 
-path_whole_dataset_csv = '/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/crop/25_04/files_in_whole_dataset_with_real_labels/number_of_images_per_specie_per_dataset.csv'
+path_whole_dataset_csv = '/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/classification/benchmark/VGG16_03_05/dataset_summary.csv'
 
 # Path to output the csv files
-path_output_csv = '/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/classification/'
+path_output_csv = '/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/classification/benchmark/VGG16_03_05/'
 
 
 ###### OUTPUTS ######
@@ -41,7 +41,7 @@ df_taxref = pd.read_csv(path_taxref, sep=';', encoding_errors='ignore', low_memo
 df_whole_dataset = pd.read_csv(path_whole_dataset_csv)
 
 # Get the species in datasets
-species_in_dataset = df_whole_dataset['Specie'].unique()
+species_in_dataset = df_whole_dataset['Species'].unique()
 
 not_in_taxref = []
 not_as_specie = []
@@ -92,13 +92,23 @@ print('Done ', smiley_check)
 print('Saving csvs...\n')
 
 df_not_in_taxref = pd.DataFrame(not_in_taxref)
-df_not_as_specie = pd.DataFrame(not_as_specie)
-df_not_in_taxref = df_not_in_taxref.sort_values(by=[0])
-df_not_as_specie = df_not_as_specie.sort_values(by=[0])
-df_specie = df_specie.sort_values(by=['species'])
+if df_not_in_taxref.empty:
+    print('All the species are in taxref')
+else:
+    df_not_in_taxref = df_not_in_taxref.sort_values(by=[0])
+    df_not_in_taxref.to_csv(os.path.join(path_output_csv, 'not_in_taxref.csv'), index=False, header=False)
+    print('Some species are not in taxref, see not_in_taxref.csv')
 
-df_not_in_taxref.to_csv(os.path.join(path_output_csv, 'not_in_taxref.csv'), index=False, header=False)
-df_not_as_specie.to_csv(os.path.join(path_output_csv, 'not_as_specie.csv'), index=False, header=False)
+
+df_not_as_specie = pd.DataFrame(not_as_specie)
+if df_not_as_specie.empty:
+    print('All the species are in the form "genus specie"')
+else:
+    df_not_as_specie = df_not_as_specie.sort_values(by=[0])
+    df_not_as_specie.to_csv(os.path.join(path_output_csv, 'not_as_specie.csv'), index=False, header=False)
+    print('Some species are not in the form "genus specie", see not_as_specie.csv')
+
+df_specie = df_specie.sort_values(by=['species'])
 df_specie.to_csv(os.path.join(path_output_csv, 'hierarchy.csv'), index=False)
 
 print('Done ' + smiley_check)
