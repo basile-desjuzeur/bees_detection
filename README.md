@@ -1,4 +1,4 @@
-<h1 align="center">Project Bees_detection</h3>
+<h1 align="center">Anthophila</h3>
 
 
 <!-- TABLE OF CONTENTS -->
@@ -18,22 +18,34 @@
     </li>
     <li><a href="#how-it-works">How it works</a></li>
     <li><a href="#how-to-use-it">How to use it</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 
 
 <!-- ABOUT THE PROJECT -->
 ## About the project
-Developed for the ECONNECT project (CNRS-LEFE), BeesDetection ensures the automatic detection of bees by Deep Learning. Here we developed an algorithm based on MobileNet and YOLO.
+Anthophila ensures the automatic detection and classification of bees by Deep Learning.
+Here we developed an algorithm based on YOLOv2 and ResNet.
 
 The process is divided in 3 phases : 
 
-* Detection with Yolo algorithm, outputs a bbox which is passed through a segment-anything
-* Crop of this image according to the bbox coordonates 
+* Detection of the insect in the picture
+
+<div style="text-align: center;">
+  <img src="src/datafiles/imgs_for_readme/readme_detected.jpg" alt="tree">
+</div>
+
+* Crop of the picture  
+
+<div style="text-align: center;">
+  <img src="src/datafiles/imgs_for_readme/readme_detected_cropped.jpg" alt="tree">
+</div>
+
 * Classification of the cropped image among * * taxons
 
+<div style="text-align: center;">
+  <img src="src/datafiles/imgs_for_readme/readme_detected.jpg" alt="tree">
+</div>
 
 <!-- GETTING STARTED -->
 # Getting Started
@@ -61,19 +73,23 @@ source venv_bees/bin/activate
 We recommend you to get the data folder and project folder (with the virtual environment) near by.
 
 <div style="text-align: center;">
-  <img src="src/datafiles/yolo/imgs/img_for_readme/tree0.png" alt="tree">
+  <img src="src/datafiles/imgs_for_readme/readme_detected.jpg" alt="tree">
 </div>
 
 <!-- HOW IT WORK -->
 # How it works
 ## Code source folder (project_bees_detection/src/yolo) 
 In src folder you will find: 
+
+* [scrap_inat](#scrap_inat) (to get initial data)
+* [yolo](#yolo) (to make detections)
+* [crop](#crop) (to crop detected pictures)
+* [classification](#classification) (to classify pictures)
+
 * [train.py](#trainpy) (for training)
 * [evaluate.py](#evaluatepy) (for evaluation)
 * [predict.py](#predictpy) (for prediction)
-### train.py
-### evaluate.py
-### predict.py
+
 
 ## YOLOV2 folder (project_bees_detection/src/yolo/keras_yolov2)
 In this YOLO folder you will find: 
@@ -91,26 +107,30 @@ In this YOLO folder you will find:
 
 <!-- HOW TO USE IT -->
 # How to use it
+DETECTION
 ```
 Create a config file, following templates in src/yolo/config
 
-python3 gen_anchors.py -c path_custom_config.json
+python3 yolo/gen_anchors.py -c path_custom_config.json
 
 Report the output of gen_anchors in the config file
 
-python3 src/yolo/train.py -c path_custom_config.json
-python3 src/yolo/evaluate.py -c path_custom_config.json
-python3 src/yolo/predict.py -c path_custom_config.json -w path_seleccted_weights.h5 -i path_image_folder_to_predict -o 'csv_input'
+python3 yolo/train.py -c path_custom_config.json
+python3 yolo/evaluate.py -c path_custom_config.json
+python3 yolo/predict.py -c path_custom_config.json -w path_seleccted_weights.h5 -i path_image_folder_to_predict -o 'csv_input'
 
-This generates a csv with the predictions from the Yolo model, pass it through segment-anything
-
-
+This generates a csv with the predictions from the Yolo model, output will be saved in src/datafiles/crop/predict_csv folder
 
 ```
+CROP
+```
+In src/crop/cropfromcsv.py complete the following lines : 
 
-<!-- CONTACT -->
-# Contact
-Basile Desjuzeur
-Lucien Rondier 
-Axel Carlier
+  - l8 : path to the folder you have made predictions on
+  - l9 : path to the folder you want to store the cropped pictures in
+  - l10 : path to the csv output by detection
+
+python3 src/crop/cropfromcsv.py
+```
+
 

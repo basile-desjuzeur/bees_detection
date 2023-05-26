@@ -404,6 +404,7 @@ class BatchGenerator(Sequence):
 
         anchors_populated_map = np.zeros((self._config['BATCH_SIZE'], self._config['GRID_H'], self._config['GRID_W'],
                                           self._config['BOX']))
+        
 
         for instance_count in range(self._config['BATCH_SIZE']):
             if self._config['MOSAIC'] == 'none':

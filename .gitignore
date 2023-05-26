@@ -26,3 +26,4 @@ src/classification/old/not_that_old/vgg16_2_species.h5
 src/classification/drive/MyDrive/Stage2A/cap500/WideResNet50-2/PoidsWR50-2/best_model_wideresnet50-2.data-00000-of-00001
 src/classification/drive/MyDrive/Stage2A/cap500/WideResNet50-2/PoidsWR50-2/best_model_wideresnet50-2.index
 src/classification/drive/MyDrive/Stage2A/cap500/WideResNet50-2/PoidsWR50-2/checkpoint
+/src/segment-anything/*
