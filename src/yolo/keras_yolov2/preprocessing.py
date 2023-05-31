@@ -460,6 +460,7 @@ class BatchGenerator(Sequence):
             # assign input image to x_batch
             if self._norm is not None:
                 x_batch[instance_count] = self._norm(img)
+                
             else:
                 # plot image and bounding boxes for sanity check
                 for bb in all_bbs:

@@ -594,7 +594,7 @@ class AbeillesSequence(Sequence):
 
 class BeeBatchGenerator(Sequence):
 
-    def __init__(self, image_filenames, labels, batch_size, image_size, classes):
+    def __init__(self, image_filenames, labels, batch_size, image_size, classes,cap):
         """
         Parameters
         ----------
@@ -603,14 +603,16 @@ class BeeBatchGenerator(Sequence):
         batch_size : int
         image_size : tuple of ints
         classes : list of strings
+        cap : int, number of images to load per species in each batch
         """
         self.image_filenames, self.labels = image_filenames, labels
         self.batch_size = batch_size
         self.image_size = image_size
         self.classes = classes
+        self.cap = cap
 
-        # First shuffle of the data
-        self.indices = np.arange(len(image_filenames))
+        # Set _indices_ list for the first epoch
+        self.on_epoch_end()
 
     def __len__(self):
         """
@@ -620,7 +622,9 @@ class BeeBatchGenerator(Sequence):
     
 
     def _process_batch_(self, _batch_x, _batch_y):
-
+        """
+        Converts a batch of paths to a batch of normalized np.arrays
+        """
         batch_x = np.zeros((len(_batch_x), self.image_size, self.image_size, 3))
         batch_y = _batch_y
 
@@ -648,11 +652,13 @@ class BeeBatchGenerator(Sequence):
 
     def __getitem__(self, idx):
         """
-        Returns one batch of data
+        Returns one batch of data, idx refers to batch number
         """
+        # Initialisation of the batch
         _batch_x = self.image_filenames[self.indices[idx *self.batch_size:(idx + 1) * self.batch_size]]
         _batch_y = self.labels[self.indices[idx *self.batch_size:(idx + 1) * self.batch_size]]
 
+        # Processing of the batch
         batch_x, batch_y = self._process_batch_(_batch_x, _batch_y)
 
         return batch_x, batch_y
@@ -663,5 +669,113 @@ class BeeBatchGenerator(Sequence):
         Shuffle the data at the end of each epoch
         """
         np.random.shuffle(self.indices)
+
+
+class BeeBatchGeneratorCapped(Sequence):
+
+    def __init__(self, image_filenames, labels, batch_size, image_size, classes,cap):
+        """
+        Parameters
+        ----------
+        image_filenames : np.array of filepaths
+        labels : np.array of labels as one-hot encoded vectors
+        batch_size : int
+        image_size : tuple of ints
+        classes : list of strings
+        cap : int, number of images to load per species in each batch
+        """
+        self.image_filenames, self.labels = image_filenames, labels
+        self.batch_size = batch_size
+        self.image_size = image_size
+        self.classes = classes
+        self.cap = cap
+
+        # Get the nb of nb of images in the less represented class
+        self.min_nb = np.min(np.sum(labels,axis=0))
+
+        if self.cap > self.min_nb:
+            self.cap = self.min_nb
+            print("Warning : cap is higher than the number of images in the less represented class, cap is set to {}".format(self.cap))
+
+
+        # First shuffle of the data
+        self.indices = np.arange(len(image_filenames))
+        self._indices_ = np.shuffle(self.indices)
+
+    def __len__(self):
+        """
+        Number of batches per epoch, i.e. number of gradient steps per epoch
+        """
+        return int(np.ceil(len(self.image_filenames) / float(self.batch_size)))
+    
+
+    def _process_batch_(self, _batch_x, _batch_y):
+        """
+        Converts a batch of paths to a batch of normalized np.arrays
+        """
+        batch_x = np.zeros((len(_batch_x), self.image_size, self.image_size, 3))
+        batch_y = _batch_y
+
+        # Iterates over the batch
+        for i,_img_path in enumerate(_batch_x):
+
+            # Read image
+            img = Image.open(_img_path)
+
+            # Resize
+            img = img.resize(self.image_size,Image.ANTIALIAS)
+
+            # Convert to array
+            img = np.asarray(img)
+
+            # Normalize
+            img = img/255
+
+            # Add to batch
+            batch_x[i] = img
+
+
+        return batch_x, batch_y
+  
+
+    def __getitem__(self, idx):
+        """
+        Returns one batch of data 
+        """
+        # Initialisation of the batch
+        _batch_x = self.image_filenames[self._indices_[0 : self.batch_size]]
+        _batch_y = self.labels[self._indices_[0 : self.batch_size]]
+
+        # Processing of the batch
+        batch_x, batch_y = self._process_batch_(_batch_x, _batch_y)
+
+        return batch_x, batch_y
+        
+
+    def _on_epoch_end_(self):
+        """
+        Create a new _indices list at the end of each epoch, with the same distribution of classes
+        (the list contains the indices of the images in the dataset, with "cap" images per class)
+        """
+        
+        # initialisation of the new indices list
+        self._indices_ = np.zeros((self.cap*len(self.classes),))
+
+        # Iterates over the classes
+        for i,_class in enumerate(self.classes):
+
+            # Get the indices of the images of the class
+            _indices = np.where(self.labels[:,i] == 1)[0]
+
+            # Randomize the indices
+            np.random.shuffle(_indices)
+
+            # Add the first "cap" indices to the new indices list
+            self._indices_[i*self.cap:(i+1)*self.cap] = _indices[:self.cap]
+
+        # Shuffle the new indices list
+        np.random.shuffle(self._indices_)
+
+
 
     
