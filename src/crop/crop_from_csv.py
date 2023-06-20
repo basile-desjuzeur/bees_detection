@@ -2,19 +2,34 @@ import os
 import pandas as pd
 from tqdm import tqdm
 from PIL import Image
+import argparse
 
 
 
-#### INPUTS ####
+#### Example of use ####
 
-# path to the csv file containing the predictions
-path_csv = '/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/crop/predict_csv/other/whole_datast_predicted_latest.csv'
+# python3 cropfromcsv.py -s /home/basile/Documents/projet_bees_detection_basile/data_bees_detection/whole_dataset 
+# -t /home/basile/Documents/projet_bees_detection_basile/data_bees_detection/whole_dataset_cropped 
+# -c /home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/crop/predict_csv/other/whole_datast_predicted_latest.csv
 
-# path to the folder were the cropped images are stored
-path_folder = '/home/basile/Documents/projet_bees_detection_basile/data_bees_detection/whole_dataset_cropped'
+########################
+
+argparser = argparse.ArgumentParser(description='Crop images from csv file')
+
+argparser.add_argument('-s',
+                          '--source_path',
+                          help='Source path where raw images are stored')
+
+argparser.add_argument('-t',
+                            '--target_path',
+                            help='Target path where cropped images will be stored')
+
+argparser.add_argument('-c',
+                            '--csv_path',
+                            help='Path to the csv file outputed by predict.py')
 
 
-#### SCRIPT ####
+#### Script ####
 
 
 def crop_image(img_path, x, y, w, h):
@@ -27,40 +42,79 @@ def crop_image(img_path, x, y, w, h):
     return img 
 
 
+def crop_images(source_path, target_path, csv_path):
+    """
+    Crop images from csv file output of predict.py and save them in target_path
+
+    Parameters
+    ----------
+    source_path : str
+        Path to the folder containing the images to crop
+        We assume that the hierarchy is as follows:
+        path/to/source_path/label/image.jpg
+
+    target_path : str
+        Path to the folder where the cropped images will be saved
+        Hierachy will be the same as source_path
+
+    csv_path : str
+        Path to the csv file outputed by predict.py
+        Format of the csv file:
+        # file_path, xmin, ymin, xmax, ymax, class_name, width, height
+    
+        
+    Returns
+    -------
+    None
+    """
+
+    # Read the csv file
+    df = pd.read_csv(csv_path, header=None)
+
+    ##  Create all the folders ##
+
+    if not os.path.exists(target_path):
+        os.makedirs(target_path)
+
+    # Get the folders of labels
+    df_folders = df.iloc[:,0].apply(lambda x: x.split('/')[:-1])
+    df_folders = df_folders.apply(lambda x: '/'.join(x))
+    df_folders = df_folders.drop_duplicates()
+    df_folders = df_folders.apply(lambda x: x.replace(source_path, target_path))
+
+   
+
+    for folder in tqdm(df_folders):
+        if not os.path.exists(folder):
+            os.makedirs(folder)
 
 
+    # Crop the images
+    for index, row in tqdm(df.iterrows()):
 
-# Read the csv file
-df = pd.read_csv(path_csv, header=None)
+        # Get the image path
+        img_path = row[0]
+        new_img_path = img_path.replace(source_path, target_path)
+        # img_path = img_path.replace(' ', '\ ')
 
-# Create all the folders
-df_folders = df.iloc[:,0].apply(lambda x: x.split('/')[:-1])
-df_folders = df_folders.apply(lambda x: '/'.join(x))
-df_folders = df_folders.apply(lambda x: x.replace('whole_dataset', 'whole_dataset_cropped'))
-df_folders = df_folders.drop_duplicates()
+        # Get the coordinates
+        x = row[1]
+        y = row[2]
+        w = row[3]
+        h = row[4]
 
-for folder in tqdm(df_folders):
-    if not os.path.exists(folder):
-        os.makedirs(folder)
+        # Crop the image
+        img = crop_image(img_path, x, y, w, h)
+
+        # Save the image
+        img.save(new_img_path)
 
 
-# Crop the images
-for index, row in tqdm(df.iterrows()):
+if __name__ == '__main__':
+    args = argparser.parse_args()
+    source_path = args.source_path
+    target_path = args.target_path
+    csv_path = args.csv_path
 
-    # Get the image path
-    img_path = row[0]
-    new_img_path = img_path.replace('whole_dataset', 'whole_dataset_cropped')
-    # img_path = img_path.replace(' ', '\ ')
-
-    # Get the coordinates
-    x = row[1]
-    y = row[2]
-    w = row[3]
-    h = row[4]
-
-    # Crop the image
-    img = crop_image(img_path, x, y, w, h)
-
-    # Save the image
-    img.save(new_img_path)
-
+    crop_images(source_path, target_path, csv_path)
+    

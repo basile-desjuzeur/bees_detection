@@ -1,7 +1,6 @@
 venv_bees/*
 cuda/*
-data_bees_detection/*  
-venv_bees_v2/*
+data_bees_detection/*
 Metriques.docx
 requirements.txt
 src/segment-anything/checkpoints/*
@@ -20,10 +19,8 @@ src/datafiles/segment-anything/*
 src/datafiles/yolo/saved_weights/*
 src/datafiles/yolo/pickles/*
 src/datafiles/yolo/outputs/*
-src/datafiles/crop/*
+src/classification/notebooks_benchmarks/*
+src/classification/old/*
 **/__pycache__/*
-src/classification/old/not_that_old/vgg16_2_species.h5
-src/classification/drive/MyDrive/Stage2A/cap500/WideResNet50-2/PoidsWR50-2/best_model_wideresnet50-2.data-00000-of-00001
-src/classification/drive/MyDrive/Stage2A/cap500/WideResNet50-2/PoidsWR50-2/best_model_wideresnet50-2.index
-src/classification/drive/MyDrive/Stage2A/cap500/WideResNet50-2/PoidsWR50-2/checkpoint
-/src/segment-anything/*
+src/segment-anything/*
+src/datafiles/classification/TAXREF16.0_ALL__11_04_2023.csv

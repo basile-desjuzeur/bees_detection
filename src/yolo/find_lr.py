@@ -20,7 +20,7 @@ argparser = argparse.ArgumentParser(
 argparser.add_argument(
     '-c',
     '--conf',
-    default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/config/bees_detection_mobilenet_retrain_find_lrjson',
+    default='/workspaces/projet_bees_detection_basile/bees_detection/src/yolo/config/bees_detection_mobilenet_retrain_find_lrjson',
     help='path to configuration file')
 
 
@@ -111,7 +111,7 @@ def _main_(args):
     
     lr_finder_callback.plot()
     now=datetime.now()
-    plt.savefig('/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/yolo/outputs/lr_finder_on_{}_.png'.format(now.strftime("%d_%m_%Y_%H_%M")))
+    plt.savefig('/workspaces/projet_bees_detection_basile/bees_detection/src/datafiles/yolo/outputs/lr_finder_on_{}_.png'.format(now.strftime("%d_%m_%Y_%H_%M")))
 
 
 

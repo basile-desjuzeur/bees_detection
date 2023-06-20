@@ -3,7 +3,7 @@ import cv2 as cv
 import numpy as np
 import tqdm 
 
-PATH_TO_DATASET ="/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/final_datafiles/dataset_yolo_cropped_with_cleaned_structure.csv"
+PATH_TO_DATASET ="/workspaces/projet_bees_detection_basile/bees_detection/src/datafiles/final_datafiles/dataset_yolo_cropped_with_cleaned_structure.csv"
     
 
 def get_means_and_stds_for_normalization(path_to_dataset):

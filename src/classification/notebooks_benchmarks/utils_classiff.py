@@ -90,9 +90,10 @@ def create_datasets_and_directories(path_to_csv,path_to_output,cap,nb_img_to_kee
     df_dataset = df_dataset[df_dataset["Labels"].isin(species_to_keep["Species"])]
 
     if nb_img_to_keep is not None : 
-        
         dataset = df_dataset.groupby('Labels').head(nb_img_to_keep)
-
+    else :
+        dataset = df_dataset
+        
         
     print('\n SUM UP OF THE FILTERING PROCESS : \n')
     print('-'*50)
@@ -109,6 +110,7 @@ def create_datasets_and_directories(path_to_csv,path_to_output,cap,nb_img_to_kee
 
     #### SPLITS THE DATASET #####
 
+    print('coucou')
 
     # Get the paths and the labels
     X = dataset["Paths"]
@@ -281,6 +283,9 @@ def create_directories(path_to_csv,path_to_output,cap,nb_img_to_keep,only_specie
         
         dataset = df_dataset.groupby('Labels').head(nb_img_to_keep)
 
+    else :
+        dataset = df_dataset
+
         
     print('\n SUM UP OF THE FILTERING PROCESS : \n')
     print('-'*50)
@@ -440,38 +445,50 @@ def load_img(path, img_size,classes):
         # convert to one hot encoding
         y[i][index] = 1
 
-
     return x,y
 
-
-def plot_random_imgs_from_train(x_train,y_train,CLASSES):
-
-    """
-    Plot 9 random images from the train dataset
-
+def plot_random_images(x):
+    """"
+    Plots 9 images from the output of create_directories.
+    We assume that the images are in a folder named after the species
+    
     Parameters
     ----------
-    x_train : array
-        Array of the train images
-    y_train : array
-        Array of the train labels
-    CLASSES : list
+    x : pd.Series
+        Series containing the paths to the images
 
     Returns
     -------
-        None
+    None
     """
 
-    # Randomisation des indices et affichage de 9 images alétoires de la base d'apprentissage
-    indices = np.arange(x_train.shape[0])
-    np.random.shuffle(indices)
-    plt.figure(figsize=(12, 12))
-    for i in range(0, 9):
-        plt.subplot(3, 3, i+1)
-        plt.title(CLASSES[int(y_train[i])])
-        plt.imshow(x_train[i])
+    # Shuffle the series
+    x = x.sample(frac=1)
+
+    # Get the first 9 images
+    x = x[:9]
+
+    # Get the labels
+    labels = [img.split('/')[-2] for img in x]
+
+
+    # Plot the images
+    fig, axes = plt.subplots(3, 3, figsize=(10, 10))
+    axes = axes.flatten()
+
+    for img, ax in zip(x, axes):
+        img = cv2.imread(img)
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        ax.imshow(img)
+        ax.axis('off')
+        # set label as title
+        ax.set_title(labels[0])
+        labels.pop(0)
+        
+    
     plt.tight_layout()
     plt.show()
+
 
 
 def plot_history(history,metric): 
@@ -610,6 +627,7 @@ class BeeBatchGenerator(Sequence):
         self.image_size = image_size
         self.classes = classes
         self.cap = cap
+        self.indices = np.arange(len(image_filenames))
 
         # Set _indices_ list for the first epoch
         self.on_epoch_end()
@@ -777,5 +795,55 @@ class BeeBatchGeneratorCapped(Sequence):
         np.random.shuffle(self._indices_)
 
 
+# def adaptative_output(path_to_csv: str = None,df_hierarchy : pd.DataFrame() = None,  confidence_thresold :float = 0.8,logits : np.array() =None,classes : list = None):
+#     """
+#     To be used for predictions : 
+#     Given the output of a trained network, returns the deepest taxa with a confidence score above a fixed 
+#     threshold. 
 
+#     Args :
+#         - path_to_csv : path to the csv containing the hierarchy of species 
+#         # species #genus #family #subfamily #tribe
+#         - df_hierarchy  : dataframe  of the hierarchy (to prevent from reloading csv at each prediction)
+#         # species #genus #family #subfamily #tribe
+#         - confidence_threshold : threshold of confidence to output a prediction
+#         - logits : output from the softmax, should be nb_classes x 1 length
+#         - classes : list of classes
+
+#     Returns : 
+
+#         - a dict : {predicted_specie : confidence, predicted_genus : confidence, ...... predicted_tribe : confidence}
+#     """
+
+#     if df_hierarchy != None:
+#         hierarchy = df_hierarchy
+#     elif path_to_csv != None :
+#         hierarchy = pd.read_csv(path_to_csv)
+#     else : 
+#         print('Please provide a hierarchy')
+#         return ValueError 
+
+#     # check if all the classes are in hierarchy
+#     classes_hierarchy = hierarchy['species'].to_list()
+#     check_classes = [classe for classe in classes_hierarchy if classe not in classes]
+
+#     if len(check_classes) != 0:
+#         print('Some hierarchies are missing, please provide the hierarchies of following species')
+#         for c in check_classes:
+#             print(' - {}'.format(c))
+#         return ValueError
+
+#     # basic check for output
+#     if len(logits) != len(classes):
+#         print('The len of the output does not correspond to the len of the given classes')
+#         return ValueError
     
+
+        
+
+#     # TODO : how do we know what specie correspond to what line in logit ??
+#     # TODO : should use matmul for efficiency
+
+
+
+# # TODO : create_get hierarchy_df from taxref

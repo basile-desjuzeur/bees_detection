@@ -5,10 +5,10 @@ import json
 from PIL import Image
 
 
-path_to_json='/home/basile/Documents/projet_bees_detection_basile/data_bees_detection/BD_71_Annotations/JSON'
-path_to_images='/home/basile/Documents/projet_bees_detection_basile/data_bees_detection/BD_71'
+path_to_json='/workspaces/projet_bees_detection_basile/data_bees_detection/BD_71_Annotations/JSON'
+path_to_images='/workspaces/projet_bees_detection_basile/data_bees_detection/BD_71'
 taxon_detection='Anthophila'
-path_to_output_csv='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/inputs/bees_detection_dataset.csv'
+path_to_output_csv='/workspaces/projet_bees_detection_basile/bees_detection/src/data/inputs/bees_detection_dataset.csv'
 
 
 master_dict=[]      # dict to be converted in csv
@@ -67,5 +67,5 @@ df_missing=pd.DataFrame(minor_dict)
 
 # Dataframe to csv
 # df_missing allows you to check if there is no corrupted pictures                 
-df_ok.to_csv('/home/basile/Documents/projet_bees_detection_basile/data_bees_detection/BD_71_Annotations/bees_detection_dataset.csv',index=False,header=False)     
-df_missing.to_csv('/home/basile/Documents/projet_bees_detection_basile/data_bees_detection/BD_71_Annotations/missing_bees_detection_dataset.csv',index=False,header=False)     
+df_ok.to_csv('/workspaces/projet_bees_detection_basile/data_bees_detection/BD_71_Annotations/bees_detection_dataset.csv',index=False,header=False)     
+df_missing.to_csv('/workspaces/projet_bees_detection_basile/data_bees_detection/BD_71_Annotations/missing_bees_detection_dataset.csv',index=False,header=False)     

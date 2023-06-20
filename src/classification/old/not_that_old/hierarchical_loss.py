@@ -15,12 +15,12 @@ Initally from https://github.com/fabiopereira59/abeilles-cap500/blob/main/Notebo
 # path to the csv file with all the hierarchy
 # csv format is : species, genus, subfamily, family
 
-path_hierarchie = '/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/classification/hierarchy.csv'
+path_hierarchie = '/workspaces/projet_bees_detection_basile/bees_detection/src/datafiles/classification/hierarchy.csv'
 
 # path to the csv file with all the species and the number of images
 # csv format is : species, number of images
 
-path_data = '/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/classification/liste_classes_71.csv'
+path_data = '/workspaces/projet_bees_detection_basile/bees_detection/src/datafiles/classification/liste_classes_71.csv'
 
 
 ###### SETTING UP THE VARIABLES ######

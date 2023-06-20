@@ -2,7 +2,7 @@ import pandas as pd
 from IPython.display import display
 #paths to data
 
-videos_annotated = "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/all_videos_annotated.csv"
+videos_annotated = "/workspaces/projet_bees_detection_basile/bees_detection/src/data/all_videos_annotated.csv"
 
 #on veut changer le csv en dataframe
 

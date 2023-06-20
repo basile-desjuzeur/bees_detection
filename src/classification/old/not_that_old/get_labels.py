@@ -8,7 +8,7 @@ argparser = argparse.ArgumentParser(description='Get all the labels of the datas
 argparser.add_argument(
     '-c',
     '--conf',
-    default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/classification/config.json')
+    default='/workspaces/projet_bees_detection_basile/bees_detection/src/classification/config.json')
 
 
 

@@ -20,13 +20,13 @@ argparser = argparse.ArgumentParser(
 argparser.add_argument(
     '-c',
     '--conf',
-    default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/config/bees_detection_mobilenet_retrain_find_lr_lr_scheduler_no_sampling.json',
+    default='/workspaces/projet_bees_detection_basile/bees_detection/src/yolo/config/final_config.json',
     help='path to configuration file')
 
 argparser.add_argument(
     '-w',
     '--weights',
-    default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/yolo/saved_weights/MobileNet_retrain_lr_1e1_COS_no_sampling_bestLoss.h5',
+    default='/workspaces/projet_bees_detection_basile/bees_detection/src/datafiles/yolo/saved_weights/Best_model_bestLoss.h5',
     help='path to pretrained weights')
 
 argparser.add_argument(
@@ -118,9 +118,9 @@ def _main_(args):
     test_csv_files = config['data']['test_csv_file']
     directory_name = f"{config['model']['backend']}_{datetime.today().strftime('%Y-%m-%d-%H:%M:%S')}"
 
-    print("Directory name for metrics: ", directory_name)
     parent_dir = config['data']['saved_pickles_path']
     path = os.path.join(parent_dir, directory_name)
+    print("Directory name for metrics: ", path)
     count = 0
 
     # checks if the directory were the pickles will be saved exists

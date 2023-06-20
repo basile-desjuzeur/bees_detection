@@ -3,8 +3,8 @@ import cv2
 import pandas as pd
 
 
-path_to_csv = '/home/basile/Documents/projet_bees_detection_basile/test2/output_copy.csv'
-path_to_output_base='/home/basile/Documents/projet_bees_detection_basile/test2/mask_generator_output_copy/'
+path_to_csv = '/workspaces/projet_bees_detection_basile/test2/output_copy.csv'
+path_to_output_base='/workspaces/projet_bees_detection_basile/test2/mask_generator_output_copy/'
 
 # Get the folder name
 folder_name = path_to_csv.split(os.path.sep)[-1]

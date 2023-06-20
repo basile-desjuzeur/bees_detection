@@ -1,7 +1,7 @@
-path_to_true_cap300 = "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/inputs/input_train_trainset_cap300.csv"
-path_to_false_cap300 = "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/inputs/input_train_cap300.csv"
-path_to_validset = "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/inputs/input_train_iNat_validset.csv"
-path_to_testset = "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/inputs/input_test.csv"
+path_to_true_cap300 = "/workspaces/projet_bees_detection_basile/bees_detection/src/data/inputs/input_train_trainset_cap300.csv"
+path_to_false_cap300 = "/workspaces/projet_bees_detection_basile/bees_detection/src/data/inputs/input_train_cap300.csv"
+path_to_validset = "/workspaces/projet_bees_detection_basile/bees_detection/src/data/inputs/input_train_iNat_validset.csv"
+path_to_testset = "/workspaces/projet_bees_detection_basile/bees_detection/src/data/inputs/input_test.csv"
 
 
 

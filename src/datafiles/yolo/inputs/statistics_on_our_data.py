@@ -13,7 +13,7 @@ argparser=argparse.ArgumentParser("Statistics on data")
 argparser.add_argument(
     '-c',
     '--conf',
-    default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/config/bees_detection.json',
+    default='/workspaces/projet_bees_detection_basile/bees_detection/src/config/bees_detection.json',
     help='path to configuration file'
 )
 

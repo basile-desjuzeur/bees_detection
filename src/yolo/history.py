@@ -13,7 +13,7 @@ argparser = argparse.ArgumentParser(
 argparser.add_argument(
     '-c',
     '--conf',
-    default='/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/yolo/config/bees_detection.json',
+    default='/workspaces/projet_bees_detection_basile/bees_detection/src/yolo/config/bees_detection.json',
     help='Path to config file.')
 
 
@@ -61,7 +61,7 @@ def _plot_history_(args):
     plt.title('Training from {}'.format(pickle_path.split(os.sep)[-1]))
     
     # Save figure
-    plot_path=os.path.join('/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/yolo/outputs/train/{}.jpg'.format(pickle_path.split(os.sep)[-1].split('.')[0]))
+    plot_path=os.path.join('/workspaces/projet_bees_detection_basile/bees_detection/src/datafiles/yolo/outputs/train/{}.jpg'.format(pickle_path.split(os.sep)[-1].split('.')[0]))
     plt.savefig(plot_path)
 
     # Displays figure

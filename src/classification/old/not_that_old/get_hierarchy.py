@@ -24,13 +24,13 @@ Output:
 ###### INPUTS ######
 
 # CSV file of the taxref database
-path_taxref = '/home/basile/Documents/projet_bees_detection_basile/data_bees_detection/TAXREF/TAXREF16.0_ALL__11_04_2023.csv'
+path_taxref = '/workspaces/projet_bees_detection_basile/data_bees_detection/TAXREF/TAXREF16.0_ALL__11_04_2023.csv'
 
 # Path to the csv file with all the species 
-path_whole_dataset_csv = '/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/classification/benchmark/VGG16_03_05/dataset_summary.csv'
+path_whole_dataset_csv = '/workspaces/projet_bees_detection_basile/bees_detection/src/datafiles/classification/benchmark/VGG16_03_05/dataset_summary.csv'
 
 # Path to output the csv files
-path_output_csv = '/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/datafiles/classification/benchmark/VGG16_03_05/'
+path_output_csv = '/workspaces/projet_bees_detection_basile/bees_detection/src/datafiles/classification/benchmark/VGG16_03_05/'
 
 
 ###### OUTPUTS ######

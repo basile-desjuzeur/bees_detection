@@ -2,8 +2,8 @@
 import csv
 
 #paths 
-video_path = "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/all_videos.csv"
-annotated_video_path = "/home/basile/Documents/projet_bees_detection_basile/bees_detection/src/data/annotated_videos.csv"
+video_path = "/workspaces/projet_bees_detection_basile/bees_detection/src/data/all_videos.csv"
+annotated_video_path = "/workspaces/projet_bees_detection_basile/bees_detection/src/data/annotated_videos.csv"
 
 
 ###Nos listes de labels connus ou non
