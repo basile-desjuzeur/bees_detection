@@ -4,7 +4,7 @@ import os
 import shutil
 import asyncio
 
-from download_from_inat import download_from_csv_not_asynchrone,download_from_csv
+from utils_download_from_inat import download_from_csv_not_asynchrone,download_from_csv
 
 ########## INPUTS ##########
 
