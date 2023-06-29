@@ -30,7 +30,7 @@ The process is divided in 4 phases :
 
 
 <div style="text-align: center;">
-  <img src="datafiles/imgs_for_readme/thumbnail_fonctionnement_general_algo.png" alt="tree">
+  <img src="/datafiles/imgs_for_readme/fonctionnement_general_algo.PNG" alt="tree">
 </div>
 
 
