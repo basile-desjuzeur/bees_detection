@@ -11,13 +11,12 @@
     <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Virtual environment</a></li>
-        <li><a href="#installation">Folder organization</a></li>
+        <li><a href="#Folder organization">Folder organization</a></li>
+        <li><a href="#Prerequisites"></a>Prerequisites</li>
+        <li><a href="#Virtual environment">Virtual environment</a></li>
       </ul>
     </li>
     <li><a href="#how-it-works">How it works</a></li>
-    <li><a href="#how-to-use-it">How to use it</a></li>
   </ol>
 </details>
 
@@ -88,7 +87,7 @@ source venv_bees_detection/bin/activate (Linux)
 
 ## 1. Scrap Inat
 
-See [How to scrap inat ?](/home/basile/Documents/bees_detection/datafiles/scrap_inat/GuideINatScrapping.txt).
+See [How to scrap inat ?](/home/basile/Documents/bees_detection/datafiles/scrap_inat/GuideINatScrapping.txt)
 
 ## 2. Detection
 
@@ -97,18 +96,17 @@ The data used to train YOLO algorithm should be in a csv with following structur
 - #database/label/img_1.jpg #bbox_xmin #bbox_xmin #bbox_ymin #bbox_xmax #bbox_ymax #label #img_w # img_h
 
 <div style="text-align: center;">
-  <img src="/datafiles/imgs_for_readme/example_yolo_input_csv.png_" alt="tree">
+  <img src="./datafiles/imgs_for_readme/example_yolo_input_csv.png" alt="tree">
 </div>
 
-You can modify the parameters of yolo's training by editing a config file in this [folder]('/home/basile/Documents/bees_detection/datafiles/yolo/configs')
+You can modify the parameters of yolo's training by editing a config file in this [folder]('./datafiles/yolo/configs')
 
 If you want to generate anchor boxes you can run : 
-
-'''
+```
 
 python3 src/yolo/utils/gen_anchors.py -c path/to/your/config/file -a desired_nb_of_anchors
 
-'''
+```
 
 And report the result in your config file in model["anchors].
 
@@ -117,28 +115,27 @@ Then you can run -after having modified your config file :
 
 - to train model on training set:
 
-'''
+```
 
 python3 src/yolo/train.py  -c path/to/your/config/file
 
-'''
+```
 
 - to evaluate model on test set:
 
-'''
-
+```
 python3 src/yolo/evaluate.py  -c path/to/your/config/file -w path/to/saved/weights
 
-'''
+```
 
 - to make predictions:
 
 
-'''
+```
 
 python3 src/yolo/predict.py  -c path/to/your/config/file -w path/to/saved/weights -i path/to/input -o output_mode
 
-'''
+```
 
 By default, --output mode is set to 'csv_input' which inputs a csv with coordinates of detected bouding boxes saved in this [folder](datafiles/crop/predict_csv)
 
@@ -146,15 +143,15 @@ By default, --output mode is set to 'csv_input' which inputs a csv with coordina
 
 To crop images around bouding boxes you can run : 
 
-'''
+```
 
 python3 scr/crop_from_csv.py -c path/to/csv/with/predictions -t folder/where/cropped/images/will/be/stored
 -s folder/where/raw/images/are/stored 
 
-'''
+```
 
 ## 4. Classification 
 
-See [here]('datafiles/classification/)
+See [here]('Notebooks/)
 
 
