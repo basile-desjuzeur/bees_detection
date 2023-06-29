@@ -97,6 +97,11 @@ def crop_images(source_path, target_path, csv_path, keep_folder_structure):
 
     for folder in tqdm.tqdm(df_folders):
         if not os.path.exists(folder):
+            
+            print('-'*50)
+            print(folder)
+            print('-'*50)
+
             os.makedirs(folder)
 
 
