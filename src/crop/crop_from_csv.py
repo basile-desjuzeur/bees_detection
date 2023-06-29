@@ -80,7 +80,7 @@ def crop_images(source_path, target_path, csv_path, keep_folder_structure):
     """
 
     # Read the csv file
-    df = pd.read_csv(csv_path, header=None)
+    df = pd.read_csv(csv_path)
 
     ##  Create all the folders ##
 
@@ -93,16 +93,18 @@ def crop_images(source_path, target_path, csv_path, keep_folder_structure):
     df_folders = df_folders.drop_duplicates()
     df_folders = df_folders.apply(lambda x: x.replace(source_path, target_path))
 
-   
+    if not os.path.exists(target_path):
+        os.makedirs(target_path)
 
-    for folder in tqdm.tqdm(df_folders):
+
+    for folder in df_folders:
         if not os.path.exists(folder):
-            
-            print('-'*50)
-            print(folder)
-            print('-'*50)
 
-            os.makedirs(folder)
+            try : 
+                os.makedirs(folder)
+            except :
+                print('problem with : {}'.format(folder))
+                continue
 
 
     # Crop the images
@@ -118,13 +120,14 @@ def crop_images(source_path, target_path, csv_path, keep_folder_structure):
             img_name = img_path.split('/')[-1]
 
             new_folder = os.path.join(target_path, '/'.join(label_name))
-
             new_img_path = img_path.replace(source_path, target_path)
+
+
             new_folder = new_img_path.split('/')[:-1]
             new_folder = '/'.join(new_folder)
 
-            if not os.path.exists(new_folder):
-                os.makedirs(new_folder)
+            # if not os.path.exists(new_folder):
+            #     os.makedirs(new_folder)
 
             new_img_path = os.path.join(new_folder, img_name)
 
