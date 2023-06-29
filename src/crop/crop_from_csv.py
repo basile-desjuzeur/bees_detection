@@ -24,6 +24,8 @@ argparser.add_argument('-t',
                             '--target_path',
                             help='Target path where cropped images will be stored')
 
+
+
 argparser.add_argument('-k',
                        '--keep_folder_structure',
                           help='Keep the folder structure of the source path i.e source/path/label/image.jpg',

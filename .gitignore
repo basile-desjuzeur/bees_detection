@@ -7,3 +7,5 @@ src/datafiles/yolo/saved_weights/*.h5
 src/datafiles/crop/predict_csv/*
 src/classification/benchmark_weights/*
 src/classification/Notebooks/benchmark_classif/*
+rapport.docx
+requirements.txt

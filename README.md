@@ -27,28 +27,40 @@
 Anthophila ensures the automatic detection and classification of bees by Deep Learning.
 Here we developed an algorithm based on YOLOv2 and ResNet.
 
-The process is divided in 3 phases : 
+The process is divided in 4 phases : 
 
-* Detection of the insect in the picture
-
-<div style="text-align: center;">
-  <img src="src/datafiles/imgs_for_readme/readme_detected.jpg" alt="tree">
-</div>
-
-* Crop of the picture  
 
 <div style="text-align: center;">
-  <img src="src/datafiles/imgs_for_readme/readme_detected_cropped.jpg" alt="tree">
+  <img src="datafiles/imgs_for_readme/thumbnail_fonctionnement_general_algo.png" alt="tree">
 </div>
 
-* Classification of the cropped image among * * taxons
 
-<div style="text-align: center;">
-  <img src="src/datafiles/imgs_for_readme/readme_detected.jpg" alt="tree">
-</div>
 
 <!-- GETTING STARTED -->
 # Getting Started
+
+
+## Folder organization
+We recommend you to get the data folder and venv folder nearby in a similar organization :
+
+<div style="text-align: center;">
+  <img src="datafiles/imgs_for_readme/folder_structure_1.png" alt="tree">
+</div>
+
+Within this repository you will find : 
+
+- Notebooks : Notebooks used to prepare data and train algorithms
+- src : main codes
+- datafiles : all the data which is not images (csv, weights, config ..)
+
+Note that the structure of src & datafiles is the same, following this structure : 
+
+
+<div style="text-align: center;">
+  <img src="datafiles/imgs_for_readme/folder_structure_2.png" alt="tree">
+</div>
+
+
 ## Prerequisites
 Depending on your OS, GPU and Drivers, you will need a custom install to use this algorithm. With at least:
 * python3
@@ -60,77 +72,89 @@ Depending on your OS, GPU and Drivers, you will need a custom install to use thi
 * bbaug
 
 ## Virtual environment
-For that, you can use a virtual environment with [python venv](https://docs.python.org/3/library/venv.html)
+You may want to use a virtual environment (see [venv documentation](https://docs.python.org/3/library/venv.html).
 ```
-cd project_bees_detection_basile
-python3 -m venv venv_bees
-source venv_bees/bin/activate
+cd projet_bees_detection
+python3 -m venv venv_bees_detection
+source venv_bees_detection/bin/activate (Linux)
 # optionnal: (depending on your hardware) 
 # pip install -r requirements.txt
 
 ```
-## Folder organization
-We recommend you to get the data folder and project folder (with the virtual environment) near by.
-
-<div style="text-align: center;">
-  <img src="src/datafiles/imgs_for_readme/readme_detected.jpg" alt="tree">
-</div>
 
 <!-- HOW IT WORK -->
 # How it works
-## Code source folder (project_bees_detection/src/yolo) 
-In src folder you will find: 
-
-* [scrap_inat](#scrap_inat) (to get initial data)
-* [yolo](#yolo) (to make detections)
-* [crop](#crop) (to crop detected pictures)
-* [classification](#classification) (to classify pictures)
-
-* [train.py](#trainpy) (for training)
-* [evaluate.py](#evaluatepy) (for evaluation)
-* [predict.py](#predictpy) (for prediction)
 
 
-## YOLOV2 folder (project_bees_detection/src/yolo/keras_yolov2)
-In this YOLO folder you will find: 
-* [backend.py](#backendpy) (to create backend of models)
-* [frontend.py](#frontendpy) (to create frontend of models)
-* [preprocessing.py](#preprocessingpy) (for preprocessing)
-* [map_evaluation.py](#mapevaluationpy) (for evaluation)
-* [utils.py](#utilspy) (for utilitarian functions)
+## 1. Scrap Inat
 
-### backend.py
-### frontend.py
-### preprocessing.py
-### map_evaluation.py
-### utils.py
+See [How to scrap inat ?](/home/basile/Documents/bees_detection/datafiles/scrap_inat/GuideINatScrapping.txt).
 
-<!-- HOW TO USE IT -->
-# How to use it
-DETECTION
-```
-Create a config file, following templates in src/yolo/config
+## 2. Detection
 
-python3 yolo/gen_anchors.py -c path_custom_config.json
+The data used to train YOLO algorithm should be in a csv with following structure : 
 
-Report the output of gen_anchors in the config file
+- #database/label/img_1.jpg #bbox_xmin #bbox_xmin #bbox_ymin #bbox_xmax #bbox_ymax #label #img_w # img_h
 
-python3 yolo/train.py -c path_custom_config.json
-python3 yolo/evaluate.py -c path_custom_config.json
-python3 yolo/predict.py -c path_custom_config.json -w path_seleccted_weights.h5 -i path_image_folder_to_predict -o 'csv_input'
+<div style="text-align: center;">
+  <img src="/datafiles/imgs_for_readme/example_yolo_input_csv.png_" alt="tree">
+</div>
 
-This generates a csv with the predictions from the Yolo model, output will be saved in src/datafiles/crop/predict_csv folder
+You can modify the parameters of yolo's training by editing a config file in this [folder]('/home/basile/Documents/bees_detection/datafiles/yolo/configs')
 
-```
-CROP
-```
-In src/crop/cropfromcsv.py complete the following lines : 
+If you want to generate anchor boxes you can run : 
 
-  - l8 : path to the folder you have made predictions on
-  - l9 : path to the folder you want to store the cropped pictures in
-  - l10 : path to the csv output by detection
+'''
 
-python3 src/crop/cropfromcsv.py
-```
+python3 src/yolo/utils/gen_anchors.py -c path/to/your/config/file -a desired_nb_of_anchors
+
+'''
+
+And report the result in your config file in model["anchors].
+
+
+Then you can run -after having modified your config file :
+
+- to train model on training set:
+
+'''
+
+python3 src/yolo/train.py  -c path/to/your/config/file
+
+'''
+
+- to evaluate model on test set:
+
+'''
+
+python3 src/yolo/evaluate.py  -c path/to/your/config/file -w path/to/saved/weights
+
+'''
+
+- to make predictions:
+
+
+'''
+
+python3 src/yolo/predict.py  -c path/to/your/config/file -w path/to/saved/weights -i path/to/input -o output_mode
+
+'''
+
+By default, --output mode is set to 'csv_input' which inputs a csv with coordinates of detected bouding boxes saved in this [folder](datafiles/crop/predict_csv)
+
+## 3. Crop
+
+To crop images around bouding boxes you can run : 
+
+'''
+
+python3 scr/crop_from_csv.py -c path/to/csv/with/predictions -t folder/where/cropped/images/will/be/stored
+-s folder/where/raw/images/are/stored 
+
+'''
+
+## 4. Classification 
+
+See [here]('datafiles/classification/)
 
 
