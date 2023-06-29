@@ -110,8 +110,22 @@ Pour vérifier que tout a bien été créé :
 Le fichier de BD fait 44Go à la fin de tout ça ! (19/04/2022)
 
 
-/////////////////////////////// NEW : AVEC UTILS_DOWNLOAD_FROM_INAT et GET_PICTURES_FROM_INAT /////////////////
+/////////////////////////////// NEW : AVEC UTILS_DOWNLOAD_FROM_INAT et GET_PICTURES_FROM_INAT ///////////////// 
 
-Remplir les inputs de get_pictures_from_inat.py
+(Basile Desjuzeur)
+
+Remplir les inputs de get_pictures_from_inat.py et le lancer sur le terminal 
+
+python3 src/scarp_inat/get_pictures_from_inat.py.
+
+
+Le fonctionnement général est le suivant : 
+
+- fournir une liste des taxons que l'on veut scraper avec leurs noms latin
+(potentiellement issue de Taxref : https://inpn.mnhn.fr/programme/referentiel-taxonomique-taxref)
+
+- trouver l'id Inaturalist correspondant
+
+- scraper toutes les photos de cet id que l'on a pas 
 
 

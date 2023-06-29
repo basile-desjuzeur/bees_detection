@@ -14,7 +14,7 @@ argparser = argparse.ArgumentParser(
 argparser.add_argument(
     '-c',
     '--conf',
-    default='/workspaces/projet_bees_detection_basile/bees_detection/src/yolo/config/config.json',
+    default='/workspaces/projet_bees_detection_basile/bees_detection/src/datafiles/yolo/configs/benchmark_configconfig.json',
     help='Path to config file.')
 
 CODE_QUOTES = '```'

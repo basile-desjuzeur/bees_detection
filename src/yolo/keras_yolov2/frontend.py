@@ -15,7 +15,7 @@ from tensorflow.keras.optimizers import Adam, SGD, RMSprop
 from tensorflow.keras.optimizers.schedules import CosineDecayRestarts, ExponentialDecay
 
 
-from history import _plot_history_ ## later 
+# from history import _plot_history_ ## later 
 from .map_evaluation import MapEvaluation
 from .preprocessing import BatchGenerator
 from .utils import decode_netout, import_feature_extractor, import_dynamically

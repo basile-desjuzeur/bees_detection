@@ -25,7 +25,7 @@ argparser.add_argument(
     '-c',
     '--conf', 
     help='Path to configuration file',
-    default='/workspaces/projet_bees_detection_basile/bees_detection/src/yolo/config/bees_detection_copy.json'
+    default='/workspaces/projet_bees_detection_basile/bees_detection/src/datafiles/yolo/configs/benchmark_configbees_detection_copy.json'
 )
 
 argparser.add_argument(

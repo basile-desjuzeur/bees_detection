@@ -23,7 +23,7 @@ from keras_yolov2.utils import (bbox_iou,
 pickle_path = "/workspaces/projet_bees_detection_basile/bees_detection/src/datafiles/yolo/pickles/histories/ResNet50_2023-04-18-16:14:01_0/test/boxes_ResNet50_test.p"
 
 # Path to config file used to evaluate
-config_path = "/workspaces/projet_bees_detection_basile/bees_detection/src/yolo/config/bees_detection_resnet_cosine.json"
+config_path = "/workspaces/projet_bees_detection_basile/bees_detection/src/datafiles/yolo/configs/benchmark_configbees_detection_resnet_cosine.json"
 
 
 

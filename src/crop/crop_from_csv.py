@@ -1,6 +1,6 @@
 import os 
 import pandas as pd
-from tqdm import tqdm
+import tqdm 
 from PIL import Image
 import argparse
 
@@ -24,6 +24,11 @@ argparser.add_argument('-t',
                             '--target_path',
                             help='Target path where cropped images will be stored')
 
+argparser.add_argument('-k',
+                       '--keep_folder_structure',
+                          help='Keep the folder structure of the source path i.e source/path/label/image.jpg',
+                          default=True)
+
 argparser.add_argument('-c',
                             '--csv_path',
                             help='Path to the csv file outputed by predict.py')
@@ -42,7 +47,7 @@ def crop_image(img_path, x, y, w, h):
     return img 
 
 
-def crop_images(source_path, target_path, csv_path):
+def crop_images(source_path, target_path, csv_path, keep_folder_structure):
     """
     Crop images from csv file output of predict.py and save them in target_path
 
@@ -62,6 +67,10 @@ def crop_images(source_path, target_path, csv_path):
         Format of the csv file:
         # file_path, xmin, ymin, xmax, ymax, class_name, width, height
     
+    keep_folder_structure : bool
+        If True, the folder structure of source_path will be kept in target_path
+        If False, all the images will be saved in target_path
+
         
     Returns
     -------
@@ -84,19 +93,38 @@ def crop_images(source_path, target_path, csv_path):
 
    
 
-    for folder in tqdm(df_folders):
+    for folder in tqdm.tqdm(df_folders):
         if not os.path.exists(folder):
             os.makedirs(folder)
 
 
     # Crop the images
-    for index, row in tqdm(df.iterrows()):
+    for index, row in tqdm.tqdm(df.iterrows()):
 
         # Get the image path
         img_path = row[0]
-        new_img_path = img_path.replace(source_path, target_path)
-        # img_path = img_path.replace(' ', '\ ')
 
+        if keep_folder_structure:
+
+            # Get the folder of the image
+            label_name = img_path.split('/')[:-2]
+            img_name = img_path.split('/')[-1]
+
+            new_folder = os.path.join(target_path, '/'.join(label_name))
+
+            new_img_path = img_path.replace(source_path, target_path)
+            new_folder = new_img_path.split('/')[:-1]
+            new_folder = '/'.join(new_folder)
+
+            if not os.path.exists(new_folder):
+                os.makedirs(new_folder)
+
+            new_img_path = os.path.join(new_folder, img_name)
+
+        else :
+            break
+
+     
         # Get the coordinates
         x = row[1]
         y = row[2]
@@ -115,6 +143,7 @@ if __name__ == '__main__':
     source_path = args.source_path
     target_path = args.target_path
     csv_path = args.csv_path
+    keep_folder_structure = args.keep_folder_structure
 
-    crop_images(source_path, target_path, csv_path)
+    crop_images(source_path, target_path, csv_path, keep_folder_structure)
     

@@ -25,7 +25,7 @@ def create_datasets_and_directories(path_to_csv,path_to_output,cap,nb_img_to_kee
     args : 
 
     path_to_csv : path to the csv file containing the dataset
-                    # paths , # labels 
+                    # path , # label 
     path_to_output : path to the output folder were folders will be created
                      in this format : 
                         output_folder
@@ -38,11 +38,11 @@ def create_datasets_and_directories(path_to_csv,path_to_output,cap,nb_img_to_kee
                             - weights.h5
     cap : minimum number of images per class, if None no cap
     nb_img_to_keep : number of images to keep per class, if None keep all images
-    only_species : if True, only keeps the images labelled as species (i.e. real labels has more than 1 word) 
+    only_species : if True, only keeps the images labelled as species (i.e. real label has more than 1 word) 
                      if False, keeps all the images
     image_size : size of the images to resize to
 
-    only_species : if True, only keeps the images labelled as species (i.e. real labels has more than 1 word)
+    only_species : if True, only keeps the images labelled as species (i.e. real label has more than 1 word)
 
     nb_classes_to_keep : number of classes to keep, if 'all' keeps all the classes
 
@@ -55,13 +55,13 @@ def create_datasets_and_directories(path_to_csv,path_to_output,cap,nb_img_to_kee
     # read the csv file
     df_dataset = pd.read_csv(path_to_csv)
     
-    # Take only the images labelled as species (i.e. real labels has more than 1 word)
+    # Take only the images labelled as species (i.e. real label has more than 1 word)
     if only_species:
-        df_dataset = df_dataset[df_dataset["Labels"].str.contains(" ")]
+        df_dataset = df_dataset[df_dataset["label"].str.contains(" ")]
   
     # Get the number of species that have more than cap images
     if cap is not None : 
-        species = df_dataset['Labels'].value_counts()[df_dataset['Labels'].value_counts() > cap]
+        species = df_dataset['label'].value_counts()[df_dataset['label'].value_counts() > cap]
 
         # Convert the series to a dataframe
         species = species.to_frame()
@@ -87,10 +87,10 @@ def create_datasets_and_directories(path_to_csv,path_to_output,cap,nb_img_to_kee
             
 
     # Filter the dataset
-    df_dataset = df_dataset[df_dataset["Labels"].isin(species_to_keep["Species"])]
+    df_dataset = df_dataset[df_dataset["label"].isin(species_to_keep["Species"])]
 
     if nb_img_to_keep is not None : 
-        dataset = df_dataset.groupby('Labels').head(nb_img_to_keep)
+        dataset = df_dataset.groupby('label').head(nb_img_to_keep)
     else :
         dataset = df_dataset
         
@@ -112,9 +112,9 @@ def create_datasets_and_directories(path_to_csv,path_to_output,cap,nb_img_to_kee
 
     print('coucou')
 
-    # Get the paths and the labels
-    X = dataset["Paths"]
-    y = dataset["Labels"]
+    # Get the path and the label
+    X = dataset["path"]
+    y = dataset["label"]
 
     
     X_train, X_test_val, y_train, y_test_val = train_test_split(X, y, test_size=0.3, stratify=y, random_state=42)
@@ -144,29 +144,29 @@ def create_datasets_and_directories(path_to_csv,path_to_output,cap,nb_img_to_kee
     for index, row in train_dataset.iterrows():
 
         # Create the folder if it does not exist
-        if not os.path.exists(path_to_output + "/train/" + row["Labels"]):
-            os.makedirs(path_to_output + "/train/" + row["Labels"])
+        if not os.path.exists(path_to_output + "/train/" + row["label"]):
+            os.makedirs(path_to_output + "/train/" + row["label"])
 
         # Copy the image
-        shutil.copy(row["Paths"], path_to_output + "/train/" + row["Labels"])
+        shutil.copy(row["path"], path_to_output + "/train/" + row["label"])
 
     for index, row in val_dataset.iterrows():
             
             # Create the folder if it does not exist
-            if not os.path.exists(path_to_output + "/validation/" + row["Labels"]):
-                os.makedirs(path_to_output + "/validation/" + row["Labels"])
+            if not os.path.exists(path_to_output + "/validation/" + row["label"]):
+                os.makedirs(path_to_output + "/validation/" + row["label"])
     
             # Copy the image
-            shutil.copy(row["Paths"], path_to_output + "/validation/" + row["Labels"])
+            shutil.copy(row["path"], path_to_output + "/validation/" + row["label"])
 
     for index, row in test_dataset.iterrows():
 
         # Create the folder if it does not exist
-        if not os.path.exists(path_to_output + "/test/" + row["Labels"]):
-            os.makedirs(path_to_output + "/test/" + row["Labels"])
+        if not os.path.exists(path_to_output + "/test/" + row["label"]):
+            os.makedirs(path_to_output + "/test/" + row["label"])
 
         # Copy the image
-        shutil.copy(row["Paths"], path_to_output + "/test/" + row["Labels"])
+        shutil.copy(row["path"], path_to_output + "/test/" + row["label"])
 
     ###### CREATE THE CSV FILES ######
 
@@ -177,9 +177,9 @@ def create_datasets_and_directories(path_to_csv,path_to_output,cap,nb_img_to_kee
 
     ##### MAKE THE DATASET OBJECTS #####
 
-    train_dataset = image_dataset_from_directory(os.path.join(path_to_output,"train"), shuffle=True, batch_size=32, image_size=(image_size,image_size),labels = 'inferred',label_mode= 'categorical')
-    test_dataset = image_dataset_from_directory(os.path.join(path_to_output,"test"), shuffle=True, batch_size=32, image_size=(image_size,image_size),labels = 'inferred',label_mode= 'categorical')
-    val_dataset = image_dataset_from_directory(os.path.join(path_to_output,"validation" ),shuffle=True, batch_size=32, image_size=(image_size,image_size),labels = 'inferred',label_mode= 'categorical')
+    train_dataset = image_dataset_from_directory(os.path.join(path_to_output,"train"), shuffle=True, batch_size=32, image_size=(image_size,image_size),label = 'inferred',label_mode= 'categorical')
+    test_dataset = image_dataset_from_directory(os.path.join(path_to_output,"test"), shuffle=True, batch_size=32, image_size=(image_size,image_size),label = 'inferred',label_mode= 'categorical')
+    val_dataset = image_dataset_from_directory(os.path.join(path_to_output,"validation" ),shuffle=True, batch_size=32, image_size=(image_size,image_size),label = 'inferred',label_mode= 'categorical')
 
     ##### PRINT INFO #####
 
@@ -187,15 +187,15 @@ def create_datasets_and_directories(path_to_csv,path_to_output,cap,nb_img_to_kee
     print('-'*50)
 
     print("Number of species in the train dataset : {}".format(len(train_dataset.class_names)))
-    print("Number of images in the train dataset : {}".format(len(train_dataset.file_paths)))
+    print("Number of images in the train dataset : {}".format(len(train_dataset.file_path)))
 
     print('-'*50)
     print("Number of species in the validation dataset : {}".format(len(val_dataset.class_names)))
-    print("Number of images in the validation dataset : {}".format(len(val_dataset.file_paths)))
+    print("Number of images in the validation dataset : {}".format(len(val_dataset.file_path)))
     
     print('-'*50)
     print("Number of species in the test dataset : {}".format(len(test_dataset.class_names)))
-    print("Number of images in the test dataset : {}".format(len(test_dataset.file_paths)))
+    print("Number of images in the test dataset : {}".format(len(test_dataset.file_path)))
 
     print('-'*50)
     print('-'*50)
@@ -214,7 +214,7 @@ def create_directories(path_to_csv,path_to_output,cap,nb_img_to_keep,only_specie
     args : 
 
     path_to_csv : path to the csv file containing the dataset
-                    # paths , # labels 
+                    # path , # label 
     path_to_output : path to the output folder were folders will be created
                      in this format : 
                         output_folder
@@ -227,11 +227,11 @@ def create_directories(path_to_csv,path_to_output,cap,nb_img_to_keep,only_specie
                             - weights.h5
     cap : minimum number of images per class, if None no cap
     nb_img_to_keep : number of images to keep per class, if None keep all images
-    only_species : if True, only keeps the images labelled as species (i.e. real labels has more than 1 word) 
+    only_species : if True, only keeps the images labelled as species (i.e. real label has more than 1 word) 
                      if False, keeps all the images
     image_size : size of the images to resize to
 
-    only_species : if True, only keeps the images labelled as species (i.e. real labels has more than 1 word)
+    only_species : if True, only keeps the images labelled as species (i.e. real label has more than 1 word)
 
     nb_classes_to_keep : number of classes to keep, if 'all' keeps all the classes
 
@@ -244,13 +244,14 @@ def create_directories(path_to_csv,path_to_output,cap,nb_img_to_keep,only_specie
     # read the csv file
     df_dataset = pd.read_csv(path_to_csv)
     
-    # Take only the images labelled as species (i.e. real labels has more than 1 word)
+    # Take only the images labelled as species (i.e. real label has more than 1 word)
     if only_species:
-        df_dataset = df_dataset[df_dataset["Labels"].str.contains(" ")]
+        df_dataset = df_dataset[df_dataset["label"].str.contains(" ")]
   
     # Get the number of species that have more than cap images
     if cap is not None : 
-        species = df_dataset['Labels'].value_counts()[df_dataset['Labels'].value_counts() > cap]
+
+        species = df_dataset['label'].value_counts()[df_dataset['label'].value_counts() > cap]
 
         # Convert the series to a dataframe
         species = species.to_frame()
@@ -274,14 +275,16 @@ def create_directories(path_to_csv,path_to_output,cap,nb_img_to_keep,only_specie
             print("nb_classes_to_keep must be less than the number of species with more than {} images, we kept all the species".format(cap))
             species_to_keep = species
 
+    else :
+        species_to_keep = species
             
 
     # Filter the dataset
-    df_dataset = df_dataset[df_dataset["Labels"].isin(species_to_keep["Species"])]
+    df_dataset = df_dataset[df_dataset["label"].isin(species_to_keep["Species"])]
 
     if nb_img_to_keep is not None : 
         
-        dataset = df_dataset.groupby('Labels').head(nb_img_to_keep)
+        dataset = df_dataset.groupby('label').head(nb_img_to_keep)
 
     else :
         dataset = df_dataset
@@ -302,9 +305,9 @@ def create_directories(path_to_csv,path_to_output,cap,nb_img_to_keep,only_specie
     #### SPLITS THE DATASET #####
 
 
-    # Get the paths and the labels
-    X = dataset["Paths"]
-    y = dataset["Labels"]
+    # Get the path and the label
+    X = dataset["path"]
+    y = dataset["label"]
 
     
     X_train, X_test_val, y_train, y_test_val = train_test_split(X, y, test_size=0.3, stratify=y, random_state=42)
@@ -334,29 +337,29 @@ def create_directories(path_to_csv,path_to_output,cap,nb_img_to_keep,only_specie
     for index, row in train_dataset.iterrows():
 
         # Create the folder if it does not exist
-        if not os.path.exists(path_to_output + "/train/" + row["Labels"]):
-            os.makedirs(path_to_output + "/train/" + row["Labels"])
+        if not os.path.exists(path_to_output + "/train/" + row["label"]):
+            os.makedirs(path_to_output + "/train/" + row["label"])
 
         # Copy the image
-        shutil.copy(row["Paths"], path_to_output + "/train/" + row["Labels"])
+        shutil.copy(row["path"], path_to_output + "/train/" + row["label"])
 
     for index, row in val_dataset.iterrows():
             
             # Create the folder if it does not exist
-            if not os.path.exists(path_to_output + "/validation/" + row["Labels"]):
-                os.makedirs(path_to_output + "/validation/" + row["Labels"])
+            if not os.path.exists(path_to_output + "/validation/" + row["label"]):
+                os.makedirs(path_to_output + "/validation/" + row["label"])
     
             # Copy the image
-            shutil.copy(row["Paths"], path_to_output + "/validation/" + row["Labels"])
+            shutil.copy(row["path"], path_to_output + "/validation/" + row["label"])
 
     for index, row in test_dataset.iterrows():
 
         # Create the folder if it does not exist
-        if not os.path.exists(path_to_output + "/test/" + row["Labels"]):
-            os.makedirs(path_to_output + "/test/" + row["Labels"])
+        if not os.path.exists(path_to_output + "/test/" + row["label"]):
+            os.makedirs(path_to_output + "/test/" + row["label"])
 
         # Copy the image
-        shutil.copy(row["Paths"], path_to_output + "/test/" + row["Labels"])
+        shutil.copy(row["path"], path_to_output + "/test/" + row["label"])
 
     ###### CREATE THE CSV FILES ######
 
@@ -368,29 +371,29 @@ def create_directories(path_to_csv,path_to_output,cap,nb_img_to_keep,only_specie
     ##### PRINT INFO #####
 
     print('_'*50)
-    print("Number of species in the train dataset : {}".format(len(train_dataset["Labels"].unique())))
+    print("Number of species in the train dataset : {}".format(len(train_dataset["label"].unique())))
     print("Number of images in the train dataset : {}".format(len(train_dataset)))
 
     print('-'*50)
-    print("Number of species in the validation dataset : {}".format(len(val_dataset["Labels"].unique())))
+    print("Number of species in the validation dataset : {}".format(len(val_dataset["label"].unique())))
     print("Number of images in the validation dataset : {}".format(len(val_dataset)))
 
     print('-'*50)
-    print("Number of species in the test dataset : {}".format(len(test_dataset["Labels"].unique())))
+    print("Number of species in the test dataset : {}".format(len(test_dataset["label"].unique())))
     print("Number of images in the test dataset : {}".format(len(test_dataset)))
 
     print('-'*50)
 
     print('Classes : ')
-    classes = train_dataset['Labels'].unique()
+    classes = train_dataset['label'].unique()
     # convert to list
     classes = classes.tolist()
     print(classes)
     print('_'*50)
 
-    X_train, y_train = train_dataset["Paths"], train_dataset["Labels"]
-    X_val, y_val = val_dataset["Paths"], val_dataset["Labels"]
-    X_test, y_test = test_dataset["Paths"], test_dataset["Labels"]
+    X_train, y_train = train_dataset["path"], train_dataset["label"]
+    X_val, y_val = val_dataset["path"], val_dataset["label"]
+    X_test, y_test = test_dataset["path"], test_dataset["label"]
 
     return X_train, y_train, X_val, y_val, X_test, y_test, classes
     
@@ -438,7 +441,7 @@ def load_img(path, img_size,classes):
         x[i] = image
 
         # extract the class label from the image path and update the
-        # labels list
+        # label list
         label = file.split(os.path.sep)[-2]
         # returns 0 or 1
         index  = classes.index(label)
@@ -455,7 +458,7 @@ def plot_random_images(x):
     Parameters
     ----------
     x : pd.Series
-        Series containing the paths to the images
+        Series containing the path to the images
 
     Returns
     -------
@@ -468,8 +471,8 @@ def plot_random_images(x):
     # Get the first 9 images
     x = x[:9]
 
-    # Get the labels
-    labels = [img.split('/')[-2] for img in x]
+    # Get the label
+    label = [img.split('/')[-2] for img in x]
 
 
     # Plot the images
@@ -482,8 +485,8 @@ def plot_random_images(x):
         ax.imshow(img)
         ax.axis('off')
         # set label as title
-        ax.set_title(labels[0])
-        labels.pop(0)
+        ax.set_title(label[0])
+        label.pop(0)
         
     
     plt.tight_layout()
@@ -532,9 +535,9 @@ class AbeillesSequence(Sequence):
         for i in range(len(bx)):
 
             # Récupération du label de l'image
-            class_labels = []
+            class_label = []
             class_id = np.argmax(by[i])
-            class_labels.append(self.classes[class_id])
+            class_label.append(self.classes[class_id])
 
             # Read image
             img = cv.imread(bx[i])
@@ -611,18 +614,18 @@ class AbeillesSequence(Sequence):
 
 class BeeBatchGenerator(Sequence):
 
-    def __init__(self, image_filenames, labels, batch_size, image_size, classes,cap):
+    def __init__(self, image_filenames, label, batch_size, image_size, classes,cap):
         """
         Parameters
         ----------
-        image_filenames : np.array of filepaths
-        labels : np.array of labels as one-hot encoded vectors
+        image_filenames : np.array of filepath
+        label : np.array of label as one-hot encoded vectors
         batch_size : int
         image_size : tuple of ints
         classes : list of strings
         cap : int, number of images to load per species in each batch
         """
-        self.image_filenames, self.labels = image_filenames, labels
+        self.image_filenames, self.label = image_filenames, label
         self.batch_size = batch_size
         self.image_size = image_size
         self.classes = classes
@@ -641,7 +644,7 @@ class BeeBatchGenerator(Sequence):
 
     def _process_batch_(self, _batch_x, _batch_y):
         """
-        Converts a batch of paths to a batch of normalized np.arrays
+        Converts a batch of path to a batch of normalized np.arrays
         """
         batch_x = np.zeros((len(_batch_x), self.image_size, self.image_size, 3))
         batch_y = _batch_y
@@ -674,7 +677,7 @@ class BeeBatchGenerator(Sequence):
         """
         # Initialisation of the batch
         _batch_x = self.image_filenames[self.indices[idx *self.batch_size:(idx + 1) * self.batch_size]]
-        _batch_y = self.labels[self.indices[idx *self.batch_size:(idx + 1) * self.batch_size]]
+        _batch_y = self.label[self.indices[idx *self.batch_size:(idx + 1) * self.batch_size]]
 
         # Processing of the batch
         batch_x, batch_y = self._process_batch_(_batch_x, _batch_y)
@@ -691,25 +694,25 @@ class BeeBatchGenerator(Sequence):
 
 class BeeBatchGeneratorCapped(Sequence):
 
-    def __init__(self, image_filenames, labels, batch_size, image_size, classes,cap):
+    def __init__(self, image_filenames, label, batch_size, image_size, classes,cap):
         """
         Parameters
         ----------
-        image_filenames : np.array of filepaths
-        labels : np.array of labels as one-hot encoded vectors
+        image_filenames : np.array of filepath
+        label : np.array of label as one-hot encoded vectors
         batch_size : int
         image_size : tuple of ints
         classes : list of strings
         cap : int, number of images to load per species in each batch
         """
-        self.image_filenames, self.labels = image_filenames, labels
+        self.image_filenames, self.label = image_filenames, label
         self.batch_size = batch_size
         self.image_size = image_size
         self.classes = classes
         self.cap = cap
 
         # Get the nb of nb of images in the less represented class
-        self.min_nb = np.min(np.sum(labels,axis=0))
+        self.min_nb = np.min(np.sum(label,axis=0))
 
         if self.cap > self.min_nb:
             self.cap = self.min_nb
@@ -729,7 +732,7 @@ class BeeBatchGeneratorCapped(Sequence):
 
     def _process_batch_(self, _batch_x, _batch_y):
         """
-        Converts a batch of paths to a batch of normalized np.arrays
+        Converts a batch of path to a batch of normalized np.arrays
         """
         batch_x = np.zeros((len(_batch_x), self.image_size, self.image_size, 3))
         batch_y = _batch_y
@@ -762,7 +765,7 @@ class BeeBatchGeneratorCapped(Sequence):
         """
         # Initialisation of the batch
         _batch_x = self.image_filenames[self._indices_[0 : self.batch_size]]
-        _batch_y = self.labels[self._indices_[0 : self.batch_size]]
+        _batch_y = self.label[self._indices_[0 : self.batch_size]]
 
         # Processing of the batch
         batch_x, batch_y = self._process_batch_(_batch_x, _batch_y)
@@ -783,7 +786,7 @@ class BeeBatchGeneratorCapped(Sequence):
         for i,_class in enumerate(self.classes):
 
             # Get the indices of the images of the class
-            _indices = np.where(self.labels[:,i] == 1)[0]
+            _indices = np.where(self.label[:,i] == 1)[0]
 
             # Randomize the indices
             np.random.shuffle(_indices)

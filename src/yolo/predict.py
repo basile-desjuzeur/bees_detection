@@ -7,6 +7,7 @@ import argparse
 import os
 import csv
 from tqdm import tqdm
+import pandas as pd
 
 import numpy as np
 import tensorflow as tf
@@ -22,14 +23,14 @@ argparser = argparse.ArgumentParser(
 argparser.add_argument(
   '-c',
   '--conf',
-  default="/workspaces/projet_bees_detection_basile/bees_detection/src/yolo/config/final_config.json",
+  default="/workspaces/projet_bees_detection_basile/bees_detection/src/datafiles/yolo/configs/final_config.json",
   type=str,
   help='path to configuration file')
 
 argparser.add_argument(
   '-w',
   '--weights',
-  default='/workspaces/projet_bees_detection_basile/bees_detection/src/datafiles/yolo/saved_weights/Best-model_bestLoss.h5',
+  default='/workspaces/projet_bees_detection_basile/bees_detection/src/datafiles/yolo/saved_weights/Best_model_bestLoss.h5',
   type=str,
   help='path to pretrained weights')
 
@@ -51,7 +52,7 @@ argparser.add_argument(
   '-i',
   '--input',
   type=str,
-  default='/workspaces/projet_bees_detection_basile/data_bees_detection/whole_dataset/',
+  default='',
   help='path to an image, a video or a folder of images')
 
 argparser.add_argument(
@@ -69,6 +70,7 @@ def _main_(args):
   use_camera = args.real_time
   lite_path = args.lite
   output_format = args.output
+  input = args.input
 
   videos_format = ['.mp4', 'avi']
 
@@ -245,6 +247,79 @@ def _main_(args):
     print(list_especes)
     print("resultat final:",res3)
 
+  ###  CSV
+  # TODO: add csv input
+  elif str(input).endswith('.csv'):
+
+    print('-'*30)
+    print("Predicting from csv file")
+    print('-'*30)
+
+    # read csv
+    df = pd.read_csv(input)
+
+    # get paths
+    paths = df['path']
+
+    # Create output csv
+    if output_format == 'csv_input':
+      
+      # get output csv name
+      now=datetime.now()
+      csv_name = input.split('/')[-1].split('.')[0]
+      ouptut_name = 'predictions_{}_{}.csv'.format(csv_name, now.strftime("%Y-%m-%d_%H-%M"))
+      detected_csv = os.path.join('/workspaces/projet_bees_detection_basile/bees_detection/src/datafiles/crop/predict_csv/', ouptut_name)
+      print("Predictions will be saved in {}".format(detected_csv))
+
+      # create csv
+      f = open(detected_csv, 'w')
+      writer = csv.writer(f)
+      
+
+
+    # list to store errors
+    errors = []
+    count_errors = 0
+
+
+    # predict
+    for path in tqdm(paths):
+        
+        # Open image
+        frame = cv2.imread(path)
+
+        try:
+          boxes = yolo.predict(frame,
+                              iou_threshold=config['valid']['iou_threshold'],
+                              score_threshold=config['valid']['score_threshold'])
+        
+        except:
+          print("Error with image {}".format(path))
+          count_errors+=1
+          errors.append(path)
+          continue 
+
+         # good for image classif    ## TODO: add other output formats
+        if output_format == 'csv_input':
+          image_h, image_w, _ = frame.shape
+          for box in boxes:
+            row = [
+                path,
+                int(box.xmin * image_w),
+                int(box.ymin * image_h),
+                int(box.xmax * image_w),
+                int(box.ymax * image_h),
+                config['model']['labels'][box.get_label()],
+                image_w,
+                image_h
+              ]
+            writer.writerow(row)
+
+    # close csv
+    f.close()
+
+
+
   ### Image
   else:
     count_errors=0
@@ -299,6 +374,8 @@ def _main_(args):
         now=datetime.now()
         path='/workspaces/projet_bees_detection_basile/bees_detection/src/datafiles/crop/predict_csv/'
         detected_csv = os.path.join(path, "detected_images_{}.csv".format(now.strftime("%Y-%m-%d_%H-%M")))
+
+        print("Predictions will be saved in {}".format(detected_csv))
 
         f = open(detected_csv, 'w')
         writer = csv.writer(f)
@@ -358,7 +435,6 @@ def _main_(args):
         f.close()
 
       print("Predictions saved in {}".format(detected_csv))
-
 
   # Errors handling
   if count_errors > 0:
