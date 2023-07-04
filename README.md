@@ -70,7 +70,7 @@ source venv_bees_detection/bin/activate (Linux)
 
 ## 1. Scrap Inat
 
-See [How to scrap inat ?](datafiles/scrap_inat/how_to_scrap_inat.md)
+See [How to scrap inat ?](Notebooks/Scrap_inat.ipynb)
 
 ## 2. Detection
 
