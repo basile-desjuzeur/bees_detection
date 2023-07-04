@@ -1,24 +1,7 @@
 <h1 align="center">Anthophila</h3>
 
 
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of content</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About the project</a>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#Folder organization">Folder organization</a></li>
-        <li><a href="#Prerequisites"></a>Prerequisites</li>
-        <li><a href="#Virtual environment">Virtual environment</a></li>
-      </ul>
-    </li>
-    <li><a href="#how-it-works">How it works</a></li>
-  </ol>
-</details>
+
 
 
 <!-- ABOUT THE PROJECT -->
@@ -71,7 +54,7 @@ Depending on your OS, GPU and Drivers, you will need a custom install to use thi
 * bbaug
 
 ## Virtual environment
-You may want to use a virtual environment (see [venv documentation](https://docs.python.org/3/library/venv.html).
+You may want to use a virtual environment (see [venv documentation](https://docs.python.org/3/library/venv.html)).
 ```
 cd projet_bees_detection
 python3 -m venv venv_bees_detection
@@ -87,7 +70,7 @@ source venv_bees_detection/bin/activate (Linux)
 
 ## 1. Scrap Inat
 
-See [How to scrap inat ?](/home/basile/Documents/bees_detection/datafiles/scrap_inat/GuideINatScrapping.txt)
+See [How to scrap inat ?](datafiles/scrap_inat/how_to_scrap_inat.md)
 
 ## 2. Detection
 
@@ -99,7 +82,7 @@ The data used to train YOLO algorithm should be in a csv with following structur
   <img src="./datafiles/imgs_for_readme/example_yolo_input_csv.png" alt="tree">
 </div>
 
-You can modify the parameters of yolo's training by editing a config file in this [folder]('./datafiles/yolo/configs')
+You can modify the parameters of yolo's training by editing a config file in this [folder](datafiles/yolo/configs). 
 
 If you want to generate anchor boxes you can run : 
 ```
@@ -152,6 +135,6 @@ python3 scr/crop_from_csv.py -c path/to/csv/with/predictions -t folder/where/cro
 
 ## 4. Classification 
 
-See [here]('Notebooks/)
+See [here](Notebooks) for more details.
 
 
