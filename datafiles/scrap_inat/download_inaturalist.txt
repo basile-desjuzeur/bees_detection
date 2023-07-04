@@ -1,0 +1,198 @@
+////////////////// RECUPERATION DES DONNEES //////////////////////////////////////////////
+
+https://github.com/inaturalist/inaturalist-open-data/tree/documentation
+
+- Installer le client aws:
+
+pip3 install --upgrade awscli
+
+- Télécharger les csv photos, observations et taxons
+
+aws s3 cp --no-sign-request s3://inaturalist-open-data/photos.csv.gz photos.csv.gz
+aws s3 cp --no-sign-request s3://inaturalist-open-data/observations.csv.gz observations.csv.gz
+aws s3 cp --no-sign-request s3://inaturalist-open-data/taxa.csv.gz taxa.csv.gz
+
+- Dézipper les fichiers : 
+
+zip -r photos.csv.gz photos.csv
+zip -r observations.csv.gz observations.csv
+zip -r taxa.csv.gz taxa.csv
+
+- Supprimer les zip
+
+rm -r photos.csv.gz
+rm -r observations.csv.gz
+rm -r taxa.csv.gz
+
+NB : Le dossier doit aussi avoir un csv desired_taxa.csv avec une liste de noms latins
+
+////////////////// PASSAGE DANS UNE BASE DE DONNEES SQLITE //////////////////////////////////////////////
+
+(Extrait et adapté de : https://forum.inaturalist.org/t/getting-the-inaturalist-aws-open-data-metadata-files-and-working-with-them-in-a-database/22135)
+
+- Installation de SQLite :
+
+sudo apt-get install sqlite3
+
+- Création d'une nouvelle base de données : 
+
+touch inat.db
+sqlite3 inat.db
+
+
+- Création des tables : 
+
+CREATE TABLE observations (
+    observation_uuid uuid NOT NULL,
+    observer_id integer,
+    latitude numeric(15,10),
+    longitude numeric(15,10),
+    positional_accuracy integer,
+    taxon_id integer,
+    quality_grade character varying(255),
+    observed_on date
+);
+
+CREATE TABLE photos (
+    photo_uuid uuid NOT NULL,
+    photo_id integer NOT NULL,
+    observation_uuid uuid NOT NULL,
+    observer_id integer,
+    extension character varying(5),
+    license character varying(255),
+    width smallint,
+    height smallint,
+    position smallint
+);
+
+CREATE TABLE taxa (
+    taxon_id integer NOT NULL,
+    ancestry character varying(255),
+    rank_level double precision,
+    rank character varying(255),
+    name character varying(255),
+    active boolean
+);
+
+CREATE TABLE observers (
+    observer_id integer NOT NULL,
+    login character varying(255),
+    name character varying(255)
+);
+
+
+CREATE TABLE desired_taxa (
+    name character varying(255)
+);
+
+- Pour vérifier que tout va bien, regarder les tables :
+.tables
+- et le contenu :
+.schema nom_table
+
+- Mettre en place une importation de csv avec colonnes séparées par des tabulations
+.mode tabs
+.import taxa.csv taxa
+.import observations.csv observations
+.import photos.csv photos
+.import desired_taxa.csv desired_taxa
+
+(Vérifier le bon import des données select * from taxa limit 10).
+
+
+- Création d'indexes pour accélérer les requêtes : 
+
+
+CREATE UNIQUE INDEX "idx_observations_observation_uuid" ON "observations" ("observation_uuid");
+CREATE INDEX "idx_observations_observer_id" ON "observations" ("observer_id");
+CREATE INDEX "idx_observations_taxon_id" ON "observations" ("taxon_id");
+CREATE INDEX "idx_observations_quality_grade" ON "observations" ("quality_grade");
+CREATE INDEX "idx_observations_observed_on" ON "observations" ("observed_on");
+CREATE INDEX "idx_observations_longitude" ON "observations" ("longitude");
+CREATE INDEX "idx_observations_latitude" ON "observations" ("latitude");
+
+CREATE INDEX "idx_photos_photo_uuid" ON "photos" ("photo_uuid");
+CREATE INDEX "idx_photos_observation_uuid" ON "photos" ("observation_uuid");
+CREATE INDEX "idx_photos_photo_id" ON "photos" ("photo_id");
+CREATE INDEX "idx_photos_observer_id" ON "photos" ("observer_id");
+CREATE INDEX "idx_photos_license" ON "photos" ("license");
+
+CREATE UNIQUE INDEX "idx_taxa_taxon_id" ON "taxa" ("taxon_id");
+CREATE INDEX "idx_taxa_name" ON "taxa" ("name");
+CREATE INDEX "idx_taxa_rank" ON "taxa" ("rank");
+CREATE INDEX "idx_taxa_rank_level" ON "taxa" ("rank_level");
+CREATE INDEX "idx_taxa_ancestry" ON "taxa" ("ancestry");
+
+CREATE UNIQUE INDEX "idx_desired_taxa_name" ON "desired_taxa" ("name");
+
+
+Pour vérifier que tout a bien été créé : 
+.indices
+
+Le fichier de BD fait 44Go à la fin de tout ça ! (19/04/2022)
+
+
+
+/////////////////////////////////////////////// LES REQUETES //////////////////////
+
+
+
+- Pour télécharger une photo à l'adresse suivante, il faut une "photo_id" et une "extension": 
+https://inaturalist-open-data.s3.amazonaws.com/photos/[photo_id]/medium.[extension]
+
+
+1/ On cherche les points a moins de 500km de Limoges 
+
+- latitude : 45.85
+- longitude : 1.86
+
+
+-- Add a new column 'in_circle' to the 'observations' table
+ALTER TABLE observations ADD COLUMN in_circle BOOLEAN;
+
+-- Update the 'in_circle' column based on distance from the circle's center
+UPDATE observations SET in_circle = 
+    CASE 
+        WHEN (
+            ACOS(SIN(RADIANS(45.85)) * SIN(RADIANS(latitude)) +
+                 COS(RADIANS(45.85)) * COS(RADIANS(latitude)) *
+                 COS(RADIANS(1.86 - longitude)))
+            ) * 6371 <= 500 THEN 1
+        ELSE 0
+    END;
+
+CREATE INDEX "idx_observations_in_circle" ON "observations" ("in_circle");
+
+
+
+    CREATE TABLE inat_filter (
+        name character varying(255),
+        taxon_id integer,
+        photo_id integer,
+        extension character varying(5),
+        observation_uuid uuid,
+        quality_grade character varying(255),
+        latitude numeric(15,10),
+        longitude numeric(15,10),
+        in_circle boolean
+    );
+
+INSERT INTO inat_filter (name, taxon_id, photo_id, extension, observation_uuid, quality_grade, latitude, longitude, in_circle)
+SELECT dt.name, tx.taxon_id, ph.photo_id, ph.extension, ob.observation_uuid, ob.quality_grade, ob.latitude, ob.longitude, ob.in_circle
+FROM desired_taxa dt
+JOIN taxa tx ON dt.name = tx.name
+JOIN observations ob ON tx.taxon_id = ob.taxon_id
+JOIN photos ph ON ob.observation_uuid = ph.observation_uuid
+WHERE ob.quality_grade = 'research' AND ob.in_circle = 1;
+
+
+Edit CSv
+
+.headers on
+.mode csv
+.output inat_filter.csv
+SELECT name,taxon_id, photo_id, extension FROM inat_filter;
+
+.output stdout
+
+
