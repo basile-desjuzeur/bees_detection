@@ -1,7 +1,9 @@
 import sys
-sys.path.append("..")
-from keras_yolov2.preprocessing import parse_annotation_xml, parse_annotation_csv
+sys.path.append('/workspaces/projet_bees_detection_basile/bees_detection/src/yolo')
+
 from keras_yolov2.utils import import_feature_extractor
+from keras_yolov2.preprocessing import parse_annotation_csv
+
 import numpy as np
 import argparse
 import random
@@ -12,13 +14,13 @@ argparser = argparse.ArgumentParser()
 argparser.add_argument(
     '-c',
     '--conf',
-    default='/workspaces/projet_bees_detection_basile/bees_detection/src/datafiles/yolo/configs/benchmark_configtest.json',
+    default='/workspaces/projet_bees_detection_basile/bees_detection/src/datafiles/yolo/configs/benchmark_configs/example.json',
     help='path to configuration file')
 
 argparser.add_argument(
     '-a',
     '--anchors',
-    default=1,
+    default=5,
     help='number of anchors to use',
     type=int)
 
