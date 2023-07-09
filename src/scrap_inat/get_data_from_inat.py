@@ -16,12 +16,12 @@ argparser = argparse.ArgumentParser()
 
 argparser.add_argument(
     '-i', '--input',
-    help='Input file',
+    help='Input file with taxon_name,taxon_id, photo_id, extension',
     required=True)
 
 args = argparser.add_argument(
     '-o', '--output',
-    help='Output folder',
+    help='Output folder, where images will be downloaded',
     required=True)
 
 args = argparser.add_argument(
@@ -83,9 +83,14 @@ def download_images(input_file, output_folder,size):
 				taxon_name = data[0]
 				photo_id = data[2]
 				extension = data[3]
+
+				# sometimes taxon name may be stored like this :
+				# "apis mellifera" rather than apis mellifera
+				if taxon_name[0] == '"':
+					taxon_name = taxon_name[1:-1]
 			
-				if not os.path.exists(output_folder + taxon_name):
-					os.mkdir(output_folder + taxon_name)
+				if not os.path.exists(os.path.join(output_folder, taxon_name)):
+					os.mkdir(os.path.join(output_folder, taxon_name))
 					
 				image_url = f"https://inaturalist-open-data.s3.amazonaws.com/photos/{photo_id}/{size}.{extension}"
 				target_dest = os.path.join(output_folder, taxon_name, f"{photo_id}.{extension}")

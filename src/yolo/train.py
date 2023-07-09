@@ -9,7 +9,7 @@ import tensorflow as tf
 from keras_yolov2.frontend import YOLO
 from keras_yolov2.preprocessing import parse_annotation_xml, parse_annotation_csv
 from keras_yolov2.utils import enable_memory_growth
-from history import _plot_history_
+
 
 argparser = argparse.ArgumentParser(
     description='Train and validate YOLO_v2 model on any dataset')
@@ -17,7 +17,7 @@ argparser = argparse.ArgumentParser(
 argparser.add_argument(
     '-c',
     '--conf',
-    default='/workspaces/projet_bees_detection_basile/bees_detection/src/datafiles/yolo/configs/benchmark_configfinal_config.json',
+    default='',
     help='path to configuration file')
 
 
@@ -117,8 +117,6 @@ def _main_(args):
                saved_pickles_path=config['data']['saved_pickles_path'],
                custom_callbacks=[],
                sampling=config['train']['sampling'])
-
-    _plot_history_(args=args)
 
 
 if __name__ == '__main__':

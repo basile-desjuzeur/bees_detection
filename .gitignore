@@ -13,3 +13,4 @@ datafiles/classification/datasets/*
 datafiles/crop/predict_csv/*
 datafiles/crop/predictions_whole_dataset_cleaned_only_species_50_1000.csv
 **/__pycache__/
+datafiles/scrap_inat/duplicates/*
